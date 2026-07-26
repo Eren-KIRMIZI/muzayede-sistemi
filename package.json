@@ -57,6 +57,13 @@
       "@hono/node-server": ">=1.13.7",
       "webpack": ">=5.97.1",
       "@nestjs/core": ">=11.1.18"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "@scarf/scarf",
+      "msgpackr-extract",
+      "prisma"
+    ]
   }
 }
