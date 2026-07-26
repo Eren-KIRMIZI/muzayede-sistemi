@@ -8,8 +8,8 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@nestjs/common": "^10.x",
-    "@nestjs/core": "^10.x"
+    "@nestjs/common": "^10.x || ^11.x",
+    "@nestjs/core": "^10.x || ^11.x"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
