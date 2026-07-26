@@ -1,4 +1,4 @@
-# Gerçek Zamanlı Müzayede Platformu
+# Microservices Mimarili Açık Artırma (Müzayede) Sistemi
 
 Bu proje, yüksek eşzamanlılık (high concurrency) gereksinimlerini karşılayacak şekilde tasarlanmış, güvenli ve ölçeklenebilir bir açık artırma (müzayede) backend platformudur. Gerçek zamanlı teklif iletimi, güvenli ödeme havuzu (escrow), sahtekarlık tespiti ve kapsamlı admin araçlarını tek bir modüler yapı altında sunar.
 
