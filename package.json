@@ -1,0 +1,42 @@
+{
+  "name": "micro-auction-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Microservices Architecture Auction Platform",
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:frontend": "turbo dev --filter=@micro/frontend",
+    "dev:docker": "docker compose -f docker-compose.dev.yml up",
+    "dev:docker:build": "docker compose -f docker-compose.dev.yml up --build",
+    "build": "turbo build",
+    "build:frontend": "turbo build --filter=@micro/frontend",
+    "build:docker": "docker compose build",
+    "up": "docker compose up -d",
+    "up:build": "docker compose up -d --build",
+    "down": "docker compose down",
+    "logs": "docker compose logs -f",
+    "lint": "turbo lint",
+    "lint:frontend": "turbo lint --filter=@micro/frontend",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
+    "clean": "turbo clean",
+    "typecheck": "turbo typecheck",
+    "db:migrate": "docker compose exec backend npx prisma migrate dev",
+    "db:seed": "docker compose exec backend npx prisma db seed",
+    "db:studio": "docker compose exec backend npx prisma studio",
+    "db:generate": "docker compose exec backend npx prisma generate",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.4.0",
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

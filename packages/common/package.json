@@ -1,0 +1,19 @@
+{
+  "name": "@micro/common",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.x",
+    "@nestjs/core": "^10.x"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "@types/node": "^22.10.0",
+    "reflect-metadata": "^0.2.2"
+  }
+}

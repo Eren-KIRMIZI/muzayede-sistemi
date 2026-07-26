@@ -1,0 +1,103 @@
+name: Hotfix
+
+on:
+  push:
+    branches:
+      - 'hotfix/**'
+
+concurrency:
+  group: hotfix-${{ github.ref }}
+  cancel-in-progress: false  # Hotfixes should not be cancelled
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '9'
+
+jobs:
+  # Fast-path: lint + type-check + test in parallel
+  validate:
+    name: Validate Hotfix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        check: [lint, typecheck, test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        run: pnpm --filter @micro/backend exec prisma generate
+
+      - name: Run ${{ matrix.check }}
+        run: |
+          if [ "${{ matrix.check }}" = "lint" ]; then pnpm lint
+          elif [ "${{ matrix.check }}" = "typecheck" ]; then pnpm typecheck
+          else pnpm --filter @micro/backend test --passWithNoTests
+          fi
+
+  build-and-tag:
+    name: Build & Tag Hotfix
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        run: pnpm --filter @micro/backend exec prisma generate
+
+      - name: Build Backend
+        run: pnpm --filter @micro/backend build
+
+      - name: Build Frontend
+        run: pnpm --filter @micro/frontend build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1' }}
+          NEXT_PUBLIC_WS_URL: ${{ secrets.NEXT_PUBLIC_WS_URL || 'http://localhost:3001' }}
+
+      - name: Create Hotfix Tag
+        run: |
+          BRANCH="${{ github.ref_name }}"
+          VERSION="${BRANCH#hotfix/}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "v${VERSION}-hotfix" -m "Hotfix: ${VERSION}"
+          git push origin "v${VERSION}-hotfix" || echo "Tag already exists"
+
+      - name: Build Docker Image
+        run: |
+          docker build -t auctionhub-backend:hotfix-${{ github.sha }} ./apps/backend
+          docker build -t auctionhub-frontend:hotfix-${{ github.sha }} ./apps/frontend
+
+  notify:
+    name: Notify Hotfix Completion
+    needs: build-and-tag
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Summary
+        run: |
+          echo "## Hotfix Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: ${{ needs.build-and-tag.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Time: $(date -u)" >> $GITHUB_STEP_SUMMARY

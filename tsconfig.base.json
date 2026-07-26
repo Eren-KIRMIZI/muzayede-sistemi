@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@micro/shared-types": ["./packages/shared-types/src/index.ts"],
+      "@micro/shared-types/*": ["./packages/shared-types/src/*"],
+      "@micro/events": ["./packages/events/src/index.ts"],
+      "@micro/events/*": ["./packages/events/src/*"],
+      "@micro/contracts": ["./packages/contracts/src/index.ts"],
+      "@micro/contracts/*": ["./packages/contracts/src/*"],
+      "@micro/common": ["./packages/common/src/index.ts"],
+      "@micro/common/*": ["./packages/common/src/*"],
+      "@micro/logger": ["./packages/logger/src/index.ts"],
+      "@micro/logger/*": ["./packages/logger/src/*"],
+      "@micro/utils": ["./packages/utils/src/index.ts"],
+      "@micro/utils/*": ["./packages/utils/src/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

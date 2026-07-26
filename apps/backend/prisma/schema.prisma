@@ -1,0 +1,548 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  SELLER
+  MODERATOR
+  ADMIN
+}
+
+model User {
+  id            String         @id @default(uuid()) @db.Uuid
+  email         String         @unique @db.VarChar(255)
+  passwordHash  String         @map("password_hash") @db.Text
+  firstName     String         @map("first_name") @db.VarChar(100)
+  lastName      String         @map("last_name") @db.VarChar(100)
+  phone         String?        @db.VarChar(30)
+  role          Role           @default(USER)
+  avatarUrl     String?        @map("avatar_url") @db.VarChar(500)
+  bio           String?        @db.VarChar(500)
+  emailVerified Boolean        @default(false) @map("email_verified")
+  isActive      Boolean        @default(true) @map("is_active")
+  failedAttempts Int           @default(0) @map("failed_attempts")
+  lockedUntil   DateTime?      @map("locked_until")
+  lastLoginAt   DateTime?      @map("last_login_at")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  deletedAt     DateTime?      @map("deleted_at")
+  isDeleted     Boolean        @default(false) @map("is_deleted")
+
+  refreshTokens       RefreshToken[]
+  sessions            UserSession[]
+  passwordResetTokens PasswordResetToken[]
+  auctions            Auction[]         @relation("AuctionSeller")
+  wonAuctions         Auction[]         @relation("AuctionWinner")
+  bids                Bid[]
+  watchlists          Watchlist[]
+  notifications       Notification[]
+  paymentsAsBuyer     Payment[]       @relation("PaymentBuyer")
+  paymentsAsSeller    Payment[]       @relation("PaymentSeller")
+  ordersAsBuyer       Order[]         @relation("OrderBuyer")
+  ordersAsSeller      Order[]         @relation("OrderSeller")
+  fraudEvents         FraudEvent[]
+  notificationPreference UserNotificationPreference?
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @unique @map("token_hash") @db.Text
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  device    String?   @db.VarChar(150)
+  ipAddress String?   @map("ip_address") @db.VarChar(45)
+  userAgent String?   @map("user_agent") @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@map("refresh_tokens")
+}
+
+model UserSession {
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  accessTokenJti String @map("access_token_jti") @db.VarChar(100)
+  ipAddress    String?   @map("ip_address") @db.VarChar(45)
+  userAgent    String?   @map("user_agent") @db.Text
+  expiresAt    DateTime  @map("expires_at")
+  lastActiveAt DateTime  @default(now()) @map("last_active_at")
+  isActive     Boolean   @default(true) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([accessTokenJti])
+  @@map("user_sessions")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  tokenHash String   @unique @map("token_hash") @db.Text
+  expiresAt DateTime @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+enum AuctionStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  ENDED
+  SOLD
+  CANCELLED
+}
+
+model Category {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique @db.VarChar(100)
+  slug        String   @unique @db.VarChar(100)
+  description String?  @db.VarChar(500)
+  icon        String?  @db.VarChar(100)
+  accentColor String?  @map("accent_color") @db.VarChar(7)
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  auctions Auction[]
+
+  @@map("categories")
+}
+
+model Auction {
+  id            String        @id @default(uuid()) @db.Uuid
+  sellerId      String        @map("seller_id") @db.Uuid
+  categoryId    String        @map("category_id") @db.Uuid
+  title         String        @db.VarChar(200)
+  description   String        @db.Text
+  status        AuctionStatus @default(DRAFT)
+  startingPrice Decimal       @map("starting_price") @db.Decimal(12, 2)
+  reservePrice  Decimal?      @map("reserve_price") @db.Decimal(12, 2)
+  currentPrice  Decimal?      @map("current_price") @db.Decimal(12, 2)
+  bidIncrement  Decimal       @map("bid_increment") @db.Decimal(12, 2) @default(1)
+  bidCount      Int           @default(0) @map("bid_count")
+  watcherCount  Int           @default(0) @map("watcher_count")
+  winnerId      String?       @map("winner_id") @db.Uuid
+  winningBidId  String?       @map("winning_bid_id") @db.Uuid
+  startedAt     DateTime?     @map("started_at")
+  endsAt        DateTime?     @map("ends_at")
+  isLive        Boolean       @default(false) @map("is_live")
+  isFeatured    Boolean       @default(false) @map("is_featured")
+  isHot         Boolean       @default(false) @map("is_hot")
+  location      String?       @db.VarChar(200)
+  shipping      String?       @db.VarChar(500)
+  version       Int           @default(0)
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  deletedAt     DateTime?     @map("deleted_at")
+
+  seller   User     @relation("AuctionSeller", fields: [sellerId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+  winner   User?    @relation("AuctionWinner", fields: [winnerId], references: [id])
+  images   AuctionImage[]
+  bids     Bid[]
+  watchers Watchlist[]
+  payments Payment[]
+  orders   Order[]  @relation("AuctionOrder")
+
+  @@index([sellerId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([endsAt])
+  @@index([isFeatured])
+  @@map("auctions")
+}
+
+model AuctionImage {
+  id        String   @id @default(uuid()) @db.Uuid
+  auctionId String   @map("auction_id") @db.Uuid
+  url       String   @db.VarChar(500)
+  alt       String?  @db.VarChar(200)
+  sortOrder Int      @default(0) @map("sort_order")
+  isPrimary Boolean  @default(false) @map("is_primary")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  auction Auction @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+
+  @@index([auctionId])
+  @@map("auction_images")
+}
+
+enum BidStatus {
+  PLACED
+  OUTBID
+  WINNING
+  WON
+  CANCELLED
+}
+
+model Bid {
+  id         String    @id @default(uuid()) @db.Uuid
+  auctionId  String    @map("auction_id") @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  amount     Decimal   @db.Decimal(12, 2)
+  maxAmount  Decimal?  @map("max_amount") @db.Decimal(12, 2)
+  isAutoBid  Boolean   @default(false) @map("is_auto_bid")
+  status     BidStatus @default(PLACED)
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  auction Auction @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@index([auctionId])
+  @@index([userId])
+  @@index([auctionId, amount(sort: Desc)])
+  @@map("bids")
+}
+
+model Watchlist {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  auctionId String   @map("auction_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  auction Auction @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, auctionId])
+  @@index([userId])
+  @@index([auctionId])
+  @@map("watchlists")
+}
+
+enum NotificationType {
+  BID_PLACED
+  OUTBID
+  AUCTION_WON
+  AUCTION_ENDED
+  PAYMENT
+  SYSTEM
+  PROMOTION
+}
+
+model Notification {
+  id        String           @id @default(uuid()) @db.Uuid
+  userId    String           @map("user_id") @db.Uuid
+  type      NotificationType @default(SYSTEM)
+  title     String           @db.VarChar(200)
+  message   String           @db.Text
+  data      Json?
+  isRead    Boolean          @default(false) @map("is_read")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+model UserNotificationPreference {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @unique @map("user_id") @db.Uuid
+  email       Boolean  @default(true)
+  inApp       Boolean  @default(true) @map("in_app")
+  push        Boolean  @default(false)
+  marketing   Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_notification_preferences")
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  BANK_TRANSFER
+  WALLET
+}
+
+enum EscrowStatus {
+  HELD
+  RELEASED
+  REFUNDED
+}
+
+model Payment {
+  id                      String        @id @default(uuid()) @db.Uuid
+  auctionId               String        @map("auction_id") @db.Uuid
+  buyerId                 String        @map("buyer_id") @db.Uuid
+  sellerId                String        @map("seller_id") @db.Uuid
+  amount                  Decimal       @db.Decimal(12, 2)
+  fee                     Decimal       @db.Decimal(12, 2) @default(0)
+  net                     Decimal       @db.Decimal(12, 2)
+  status                  PaymentStatus @default(PENDING)
+  method                  PaymentMethod @default(CARD)
+  escrowStatus            EscrowStatus  @default(HELD) @map("escrow_status")
+  stripePaymentIntentId   String?       @unique @map("stripe_payment_intent_id") @db.VarChar(200)
+  stripeChargeId          String?       @unique @map("stripe_charge_id") @db.VarChar(200)
+  paidAt                  DateTime?     @map("paid_at")
+  releasedAt              DateTime?     @map("released_at")
+  refundedAt              DateTime?     @map("refunded_at")
+  createdAt               DateTime      @default(now()) @map("created_at")
+  updatedAt               DateTime      @updatedAt @map("updated_at")
+
+  auction Auction @relation(fields: [auctionId], references: [id])
+  buyer   User    @relation("PaymentBuyer", fields: [buyerId], references: [id])
+  seller  User    @relation("PaymentSeller", fields: [sellerId], references: [id])
+  order   Order?
+
+  @@index([auctionId])
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([status])
+  @@map("payments")
+}
+
+model IdempotencyKey {
+  id         String   @id @default(uuid()) @db.Uuid
+  key        String   @unique @db.VarChar(100)
+  userId     String   @map("user_id") @db.Uuid
+  request    Json
+  response   Json?
+  statusCode Int?     @map("status_code")
+  expiresAt  DateTime @map("expires_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([key])
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("idempotency_keys")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  DISPUTED
+  REFUNDED
+}
+
+model Order {
+  id              String      @id @default(uuid()) @db.Uuid
+  paymentId       String      @unique @map("payment_id") @db.Uuid
+  auctionId       String      @map("auction_id") @db.Uuid
+  buyerId         String      @map("buyer_id") @db.Uuid
+  sellerId        String      @map("seller_id") @db.Uuid
+  status          OrderStatus @default(CONFIRMED)
+  trackingNumber  String?     @map("tracking_number") @db.VarChar(200)
+  carrier         String?     @db.VarChar(100)
+  shippingAddress Json?       @map("shipping_address")
+  sellerNote      String?     @map("seller_note") @db.VarChar(1000)
+  deliveredAt     DateTime?   @map("delivered_at")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  payment Payment @relation(fields: [paymentId], references: [id])
+  auction Auction @relation("AuctionOrder", fields: [auctionId], references: [id])
+  buyer   User    @relation("OrderBuyer", fields: [buyerId], references: [id])
+  seller  User    @relation("OrderSeller", fields: [sellerId], references: [id])
+
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([auctionId])
+  @@index([status])
+  @@map("orders")
+}
+
+enum AuditAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  BID
+  PAYMENT
+}
+
+model AuditLog {
+  id          String      @id @default(uuid()) @db.Uuid
+  userId      String?     @map("user_id") @db.Uuid
+  action      AuditAction
+  resource    String      @db.VarChar(100)
+  resourceId  String?     @map("resource_id") @db.Uuid
+  oldData     Json?       @map("old_data")
+  newData     Json?       @map("new_data")
+  ipAddress   String?     @map("ip_address") @db.VarChar(45)
+  userAgent   String?     @map("user_agent") @db.Text
+  requestId   String?     @map("request_id") @db.VarChar(50)
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([resource, resourceId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+enum FraudEventType {
+  SHILL_BIDDING
+  BOT_DETECTION
+  COLLUSION
+  ACCOUNT_FARMING
+  RATE_LIMIT
+  PRICE_MANIPULATION
+  LAST_SECOND_SNIPING
+  SUSPICIOUS_PATTERN
+}
+
+enum FraudSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum FraudStatus {
+  PENDING
+  REVIEWING
+  CONFIRMED
+  DISMISSED
+  ESCALATED
+}
+
+model FraudEvent {
+  id         String          @id @default(uuid()) @db.Uuid
+  auctionId  String          @map("auction_id") @db.Uuid
+  bidId      String?         @map("bid_id") @db.Uuid
+  userId     String          @map("user_id") @db.Uuid
+  eventType  FraudEventType  @map("event_type")
+  severity   FraudSeverity
+  status     FraudStatus     @default(PENDING)
+  riskScore  Float           @default(0) @map("risk_score")
+  metadata   Json            @default("{}")
+  evidence   Json            @default("[]")
+  reviewNote String?         @map("review_note") @db.Text
+  reviewedBy String?         @map("reviewed_by") @db.Uuid
+  createdAt  DateTime        @default(now()) @map("created_at")
+  resolvedAt DateTime?       @map("resolved_at")
+
+  user          User           @relation(fields: [userId], references: [id])
+  reviewQueue   ReviewQueue[]
+  appeals       Appeal[]
+
+  @@index([auctionId, eventType])
+  @@index([userId, createdAt])
+  @@index([status, severity])
+  @@map("fraud_events")
+}
+
+model SuspiciousAccount {
+  id             String   @id @default(uuid()) @db.Uuid
+  primaryUserId  String   @map("primary_user_id") @db.Uuid
+  linkedUserId   String   @map("linked_user_id") @db.Uuid
+  linkType       String   @map("link_type") @db.VarChar(50)
+  confidence     Float
+  evidence       Json     @default("{}")
+  confirmed      Boolean  @default(false)
+  detectedAt     DateTime @default(now()) @map("detected_at")
+
+  @@index([primaryUserId])
+  @@index([linkedUserId])
+  @@map("suspicious_accounts")
+}
+
+model UserIpHistory {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  ipAddress String   @map("ip_address") @db.VarChar(45)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId, createdAt])
+  @@index([ipAddress])
+  @@map("user_ip_history")
+}
+
+model UserDeviceFingerprint {
+  id                 String   @id @default(uuid()) @db.Uuid
+  userId             String   @map("user_id") @db.Uuid
+  deviceFingerprint  String   @map("device_fingerprint") @db.Text
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([deviceFingerprint])
+  @@map("user_device_fingerprints")
+}
+
+model ReviewQueue {
+  id                  String    @id @default(uuid()) @db.Uuid
+  fraudEventId        String    @map("fraud_event_id") @db.Uuid
+  assignedModeratorId String?   @map("assigned_moderator_id") @db.Uuid
+  priority            Int       @default(50)
+  slaDeadline         DateTime  @map("sla_deadline")
+  status              String    @default("pending") @db.VarChar(20)
+  createdAt           DateTime  @default(now()) @map("created_at")
+  resolvedAt          DateTime? @map("resolved_at")
+
+  fraudEvent FraudEvent @relation(fields: [fraudEventId], references: [id])
+
+  @@index([status, priority])
+  @@index([assignedModeratorId])
+  @@map("review_queue")
+}
+
+model PenaltyHistory {
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  penaltyType  String    @map("penalty_type") @db.VarChar(50)
+  reason       String    @db.Text
+  duration     Int?
+  appliedBy    String?   @map("applied_by") @db.Uuid
+  appliedAt    DateTime  @default(now()) @map("applied_at")
+  expiresAt    DateTime? @map("expires_at")
+  appealStatus String    @default("none") @map("appeal_status") @db.VarChar(20)
+
+  @@index([userId, appliedAt(sort: Desc)])
+  @@map("penalty_history")
+}
+
+
+model Appeal {
+  id            String    @id @default(uuid()) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  fraudEventId  String    @map("fraud_event_id") @db.Uuid
+  reason        String    @db.Text
+  evidence      Json      @default("[]")
+  status        String    @default("pending") @db.VarChar(20)
+  reviewedBy    String?   @map("reviewed_by") @db.Uuid
+  reviewNote    String?   @map("review_note") @db.Text
+  createdAt     DateTime  @default(now()) @map("created_at")
+  resolvedAt    DateTime? @map("resolved_at")
+
+  fraudEvent FraudEvent @relation(fields: [fraudEventId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@map("appeals")
+}

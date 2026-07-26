@@ -1,0 +1,72 @@
+# ─── Dependencies ────────────────────────────────────────────────────────────
+node_modules/
+
+# ─── Build Outputs ───────────────────────────────────────────────────────────
+dist/
+build/
+out/
+.next/
+.turbo/
+.nest/
+
+# ─── Environment Variables ───────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ─── Secrets & Certificates ──────────────────────────────────────────────────
+*.pem
+*.key
+*.p12
+*.pfx
+certs/
+
+# ─── Logs ────────────────────────────────────────────────────────────────────
+*.log
+*.err
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─── Testing & Coverage ──────────────────────────────────────────────────────
+coverage/
+lcov.info
+*.lcov
+
+# ─── TypeScript ──────────────────────────────────────────────────────────────
+*.tsbuildinfo
+
+# ─── Package Manager Lock Files (monorepo pnpm kullanır) ─────────────────────
+package-lock.json
+yarn.lock
+
+# ─── IDE ─────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# ─── OS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ─── Docker ──────────────────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ─── Prisma ──────────────────────────────────────────────────────────────────
+prisma/generated/
+
+# ─── v0 / Vercel ─────────────────────────────────────────────────────────────
+.vercel/
+.v0-trash/
+.snowflake/
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts

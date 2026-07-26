@@ -1,0 +1,38 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Europe/Istanbul
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - automated
+    groups:
+      nestjs:
+        patterns: ["@nestjs/*"]
+        update-types: ["minor", "patch"]
+      react:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+      prisma:
+        patterns: ["prisma", "@prisma/client"]
+      testing:
+        patterns: ["jest", "ts-jest", "@types/jest", "@nestjs/testing"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    labels:
+      - dependencies
+      - ci
+    groups:
+      github-actions:
+        patterns: ["*"]
