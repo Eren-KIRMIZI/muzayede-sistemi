@@ -9,7 +9,7 @@ class SocketService {
   /**
    * Connect to a specific namespace
    */
-  connect(namespace: string = '', token?: string) {
+  connect(namespace: string = '', token?: string): Socket {
     if (this.socket) {
       if (this.namespace === namespace) return this.socket;
       this.disconnect();

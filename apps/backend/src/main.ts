@@ -58,7 +58,7 @@ async function bootstrap() {
   const allowedOrigins = corsOrigins.split(',').map((o: string) => o.trim())
 
   app.enableCors({
-    origin: (origin, callback) => {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true)
       } else if (nodeEnv !== 'production') {
