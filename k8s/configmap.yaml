@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: auction-hub
+data:
+  NODE_ENV: "production"
+  PORT: "3001"
+  FRONTEND_URL: "https://auctionhub.io"
+  CORS_ORIGIN: "https://auctionhub.io"
+  REDIS_HOST: "redis-master"
+  REDIS_PORT: "6379"
+  OTEL_ENABLED: "true"
+  OTEL_SERVICE_NAME: "auction-backend"
+  OTEL_EXPORTER_ENDPOINT: "http://jaeger-collector:4318/v1/traces"
+  SMTP_HOST: "smtp.mailgun.org"
+  SMTP_PORT: "587"

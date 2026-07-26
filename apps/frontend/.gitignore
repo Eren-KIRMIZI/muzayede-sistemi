@@ -1,0 +1,32 @@
+# ─── Dependencies ────────────────────────────────────────────────────────────
+node_modules/
+
+# ─── Build Outputs ───────────────────────────────────────────────────────────
+.next/
+out/
+dist/
+build/
+
+# ─── Environment Variables ───────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ─── TypeScript ──────────────────────────────────────────────────────────────
+*.tsbuildinfo
+
+# ─── Testing & Coverage ──────────────────────────────────────────────────────
+coverage/
+
+# ─── v0 / Vercel ─────────────────────────────────────────────────────────────
+.vercel/
+.v0-trash/
+.snowflake/
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+
+# ─── OS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
