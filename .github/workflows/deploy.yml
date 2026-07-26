@@ -10,7 +10,6 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_PREFIX: ${{ github.repository }}
 
 jobs:
   build-and-push:
@@ -37,11 +36,13 @@ jobs:
         with:
           driver: docker-container
 
-      - name: Extract metadata
+      - name: Set image metadata
         id: meta
         run: |
           VERSION=$(echo "${{ github.sha }}" | cut -c1-7)
+          IMAGE_PREFIX=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "image_prefix=${IMAGE_PREFIX}" >> "$GITHUB_OUTPUT"
 
       - name: Build and push backend
         uses: docker/build-push-action@v6
@@ -49,8 +50,8 @@ jobs:
           context: ./apps/backend
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/backend:${{ steps.meta.outputs.version }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/backend:latest
+            ${{ env.REGISTRY }}/${{ steps.meta.outputs.image_prefix }}/backend:${{ steps.meta.outputs.version }}
+            ${{ env.REGISTRY }}/${{ steps.meta.outputs.image_prefix }}/backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -60,8 +61,8 @@ jobs:
           context: ./apps/frontend
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend:${{ steps.meta.outputs.version }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend:latest
+            ${{ env.REGISTRY }}/${{ steps.meta.outputs.image_prefix }}/frontend:${{ steps.meta.outputs.version }}
+            ${{ env.REGISTRY }}/${{ steps.meta.outputs.image_prefix }}/frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
