@@ -9,6 +9,7 @@ RUN corepack enable && corepack prepare pnpm@9.15.0 --activate && pnpm install -
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN mkdir -p /app/certs && chown -R nestjs:nodejs /app/certs
 RUN npx prisma generate
 RUN npx nest build
 

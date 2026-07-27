@@ -1,13 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { NotificationService } from './notification.service'
 import { PrismaService } from '../../prisma/prisma.service'
-import { AuctionGateway } from './notification.gateway'
-import { createMockPrisma, createMockGateway } from '../../../test/helpers'
+import { createMockPrisma } from '../../../test/helpers'
 
 describe('NotificationService', () => {
   let service: NotificationService
   let prisma: ReturnType<typeof createMockPrisma>
-  let gateway: ReturnType<typeof createMockGateway>
 
   const mockNotification = {
     id: 'notif-1',
@@ -22,13 +20,14 @@ describe('NotificationService', () => {
 
   beforeEach(async () => {
     prisma = createMockPrisma()
-    gateway = createMockGateway()
+    ;(prisma as any).userNotificationPreference = {
+      findUnique: jest.fn().mockResolvedValue(null),
+    }
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         NotificationService,
         { provide: PrismaService, useValue: prisma },
-        { provide: AuctionGateway, useValue: gateway },
       ],
     }).compile()
 
@@ -40,13 +39,12 @@ describe('NotificationService', () => {
   // ── create ─────────────────────────────────────────────────────────────────
 
   describe('create', () => {
-    it('should create a notification and push via websocket', async () => {
+    it('should create a notification', async () => {
       ;(prisma.notification.create as jest.Mock).mockResolvedValue(mockNotification)
 
       const result = await service.create('user-1', 'SYSTEM', 'Test', 'Hello')
 
       expect(prisma.notification.create).toHaveBeenCalledTimes(1)
-      expect(gateway.sendNotification).toHaveBeenCalledWith('user-1', mockNotification)
       expect(result).toEqual(mockNotification)
     })
   })
@@ -70,7 +68,7 @@ describe('NotificationService', () => {
     it('should mark specific notification as read', async () => {
       ;(prisma.notification.updateMany as jest.Mock).mockResolvedValue({ count: 1 })
 
-      const result = await service.markAsRead('user-1', 'notif-1')
+      const result = await service.markAsRead('notif-1', 'user-1')
       expect(prisma.notification.updateMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { id: 'notif-1', userId: 'user-1' },
@@ -109,7 +107,7 @@ describe('NotificationService', () => {
     it('should delete a notification belonging to user', async () => {
       ;(prisma.notification.deleteMany as jest.Mock).mockResolvedValue({ count: 1 })
 
-      const result = await service.remove('user-1', 'notif-1')
+      const result = await service.remove('notif-1', 'user-1')
       expect(result.count).toBe(1)
     })
   })

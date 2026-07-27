@@ -230,6 +230,7 @@ export const mockAuction = {
   shipping: 'Kargo ile gönderim',
   startedAt: new Date('2024-01-01'),
   deletedAt: null,
+  version: 1,
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-01'),
 }
@@ -259,6 +260,7 @@ export const mockPayment = {
   paidAt: new Date(),
   releasedAt: null,
   refundedAt: null,
+  auction: { id: 'auction-1', title: 'Test Auction' },
   createdAt: new Date(),
   updatedAt: new Date(),
 }
