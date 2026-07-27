@@ -57,16 +57,16 @@ export default function HomePage() {
       <section className="relative mx-auto max-w-7xl px-6 py-20">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-medium text-primary">Handpicked</p>
+            <p className="text-sm font-medium text-primary">Seçilmiş</p>
             <h2 className="mt-2 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-              Featured auctions
+              Öne çıkan müzayedeler
             </h2>
           </div>
           <Link
             href="/auctions"
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
           >
-            Browse all <ArrowRight className="size-4" />
+            Tümünü görüntüle <ArrowRight className="size-4" />
           </Link>
         </div>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -82,12 +82,12 @@ export default function HomePage() {
       <section className="relative mx-auto max-w-7xl px-6 py-20">
         <div className="flex items-center gap-3">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-bid/10 px-3 py-1.5 text-xs font-medium text-bid">
-            <Radio className="size-3.5" /> Live now
+            <Radio className="size-3.5" /> Şu an canlı
           </span>
           <div className="h-px flex-1 bg-border" />
         </div>
         <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-          Bidding is heating up
+          Teklifler kızışıyor
         </h2>
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {isLoading

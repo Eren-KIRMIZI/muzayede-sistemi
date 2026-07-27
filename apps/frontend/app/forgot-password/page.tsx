@@ -23,18 +23,18 @@ export default function ForgotPasswordPage() {
       await authApi.forgotPassword(email)
       setIsSubmitted(true)
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to send reset email. Please try again.')
+      setError(err.response?.data?.message || 'Sıfırlama e-postası gönderilemedi. Lütfen tekrar deneyin.')
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <AuthShell eyebrow="Password recovery">
+    <AuthShell eyebrow="Şifre kurtarma">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Reset your password</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Şifrenizi Sıfırlayın</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
-          Enter your email and we&apos;ll send you a reset link.
+          E-posta adresinizi girin, size bir sıfırlama bağlantısı gönderelim.
         </p>
       </div>
 
@@ -43,11 +43,11 @@ export default function ForgotPasswordPage() {
           <div className="flex items-center gap-3 rounded-xl border border-emerald/30 bg-emerald/10 px-4 py-3">
             <CheckCircle className="size-5 text-emerald" />
             <p className="text-sm text-emerald">
-              Reset link sent! Check your inbox.
+              Sıfırlama bağlantısı gönderildi! Gelen kutunuzu kontrol edin.
             </p>
           </div>
           <p className="text-sm text-muted-foreground">
-            Didn&apos;t receive the email?{' '}
+            E-postayı almadınız mı?{' '}
             <button
               onClick={() => {
                 setIsSubmitted(false)
@@ -55,14 +55,14 @@ export default function ForgotPasswordPage() {
               }}
               className="font-medium text-primary hover:underline"
             >
-              Try again
+              Tekrar dene
             </button>
           </p>
           <Link
             href="/login"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="size-4" /> Back to sign in
+            <ArrowLeft className="size-4" /> Giriş sayfasına dön
           </Link>
         </div>
       ) : (
@@ -77,7 +77,7 @@ export default function ForgotPasswordPage() {
             label="Email"
             id="email"
             type="email"
-            placeholder="you@company.com"
+            placeholder="you@example.com"
             autoComplete="email"
             icon={Mail}
             value={email}
@@ -91,14 +91,14 @@ export default function ForgotPasswordPage() {
             disabled={isLoading}
             className="h-11 w-full rounded-xl bg-primary text-sm font-semibold text-primary-foreground hover:bg-primary/90"
           >
-            {isLoading ? 'Sending...' : 'Send reset link'}
+            {isLoading ? 'Gönderiliyor...' : 'Sıfırlama Bağlantısı Gönder'}
           </Button>
 
           <Link
             href="/login"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="size-4" /> Back to sign in
+            <ArrowLeft className="size-4" /> Giriş sayfasına dön
           </Link>
         </form>
       )}

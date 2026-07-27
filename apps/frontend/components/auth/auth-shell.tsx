@@ -35,13 +35,13 @@ export function AuthShell({
               {eyebrow}
             </p>
             <h2 className="mt-3 text-balance text-3xl font-semibold leading-tight text-foreground">
-              Where rare things find their true value.
+              Nadir eşyalar gerçek değerini bulur.
             </h2>
             <div className="mt-8 space-y-4">
               {[
-                { icon: Zap, t: 'Real-time bidding', d: 'Sub-40ms websocket bid feed' },
-                { icon: ShieldCheck, t: 'Escrow protection', d: 'Every settlement is insured' },
-                { icon: TrendingUp, t: 'Enterprise scale', d: '40k+ concurrent bidders' },
+                { icon: Zap, t: 'Gerçek zamanlı teklif', d: '40ms altı websocket teklif akışı' },
+                { icon: ShieldCheck, t: 'Emanet koruması', d: 'Her ödeme sigortalıdır' },
+                { icon: TrendingUp, t: 'Kurumsal ölçek', d: '40.000+ eşzamanlı teklif veren' },
               ].map((f) => (
                 <div key={f.t} className="flex items-center gap-3">
                   <span className="glass-strong flex size-10 items-center justify-center rounded-xl">
@@ -57,7 +57,7 @@ export function AuthShell({
           </div>
 
           <p className="text-xs text-muted-foreground">
-            Trusted by 2,400+ auction houses worldwide
+            Dünyanın dört bir yanındaki müzayede evleri tarafından güveniliyor
           </p>
         </div>
       </div>

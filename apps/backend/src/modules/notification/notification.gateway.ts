@@ -48,8 +48,9 @@ export class AuctionGateway implements OnGatewayConnection, OnGatewayDisconnect 
       }
       this.connectedUsers.get(userId)!.add(client.id)
 
-      client.join(`user:${userId}`)
-      this.logger.log(`User ${userId} connected (socket: ${client.id})`)
+    client.join(`user:${userId}`)
+    client.join('feed:global')
+    this.logger.log(`User ${userId} connected (socket: ${client.id})`)
     } catch {
       client.disconnect()
     }
@@ -89,6 +90,20 @@ export class AuctionGateway implements OnGatewayConnection, OnGatewayDisconnect 
   broadcastBid(auctionId: string, bid: any) {
     try {
       this.server.to(`auction:${auctionId}`).emit('bid:new', { auctionId, bid })
+
+      const userName = typeof bid.user === 'string'
+        ? bid.user
+        : bid.user
+          ? `${bid.user.firstName ?? ''} ${bid.user.lastName ?? ''}`.trim() || 'bidder'
+          : 'bidder'
+
+      this.server.to('feed:global').emit('feed:bid', {
+        auctionId,
+        user: userName,
+        amount: bid.amount ?? bid.currentPrice ?? 0,
+        auctionTitle: bid.auctionTitle || auctionId,
+        createdAt: bid.createdAt || new Date().toISOString(),
+      })
     } catch (err: any) {
       this.logger.error(`Failed to broadcast bid: ${err.message}`)
     }

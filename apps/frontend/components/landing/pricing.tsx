@@ -5,40 +5,40 @@ import { cn } from '@/lib/utils'
 
 const plans = [
   {
-    name: 'Bidder',
-    price: 'Free',
-    tag: 'For collectors',
-    features: ['Unlimited bidding', 'Real-time bid feed', 'Watchlist & alerts', 'Wallet & escrow'],
-    cta: 'Start bidding',
+    name: 'Teklif Veren',
+    price: 'Ücretsiz',
+    tag: 'Koleksiyoncular için',
+    features: ['Sınırsız teklif verme', 'Gerçek zamanlı teklif akışı', 'İzleme listesi ve uyarılar', 'Cüzdan ve emanet'],
+    cta: 'Teklif vermeye başla',
     featured: false,
   },
   {
-    name: 'Seller Pro',
+    name: 'Satıcı Pro',
     price: '$29',
-    period: '/mo',
-    tag: 'For power sellers',
+    period: '/ay',
+    tag: 'Güçlü satıcılar için',
     features: [
-      'Everything in Bidder',
-      'List unlimited auctions',
-      'Advanced analytics dashboard',
-      'Auto-bidding insights',
-      'Priority settlement',
+      'Teklif Veren\'deki her şey',
+      'Sınırsız müzayede listeleme',
+      'Gelişmiş analitik paneli',
+      'Otomatik teklif içgörüleri',
+      'Öncelikli yerleşim',
     ],
-    cta: 'Upgrade to Pro',
+    cta: 'Pro\'ya yükselt',
     featured: true,
   },
   {
-    name: 'Enterprise',
-    price: 'Custom',
-    tag: 'For auction houses',
+    name: 'Kurumsal',
+    price: 'Özel',
+    tag: 'Müzayede evleri için',
     features: [
-      'Dedicated tenant & SSO',
-      'Microservices observability',
-      'SLA-backed 99.99% uptime',
-      'Custom branding',
-      'Kafka event export',
+      'Özel kiracı ve SSO',
+      'Mikroservis gözlemlenebilirliği',
+      'SLA destekli %99.99 çalışma süresi',
+      'Özel marka',
+      'Kafka olay dışa aktarımı',
     ],
-    cta: 'Contact sales',
+    cta: 'Satış ekibiyle iletişime geçin',
     featured: false,
   },
 ]
@@ -47,9 +47,9 @@ export function Pricing() {
   return (
     <section id="pricing" className="relative mx-auto max-w-7xl px-6 py-20">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-sm font-medium text-primary">Pricing</p>
+        <p className="text-sm font-medium text-primary">Fiyatlandırma</p>
         <h2 className="mt-2 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-          Plans that scale with you
+          Sizinle birlikte ölçeklenen planlar
         </h2>
       </div>
 
@@ -65,7 +65,7 @@ export function Pricing() {
           >
             {p.featured && (
               <span className="absolute right-6 top-6 rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
-                Most popular
+                En popüler
               </span>
             )}
             <p className="text-sm text-muted-foreground">{p.tag}</p>

@@ -17,13 +17,13 @@ export default function LiveAuctionsPage() {
   const live = data?.data || []
 
   return (
-    <DashboardShell title="Live Auctions" subtitle="Auctions happening right now">
+    <DashboardShell title="Canlı Müzayedeler" subtitle="Şu anda devam eden müzayedeler">
       <div className="flex items-center gap-2 mb-6">
         <span className="relative flex size-2">
           <span className="animate-pulse-ring absolute inline-flex size-full rounded-full bg-bid" />
           <span className="relative inline-flex size-2 rounded-full bg-bid" />
         </span>
-        <span className="text-sm text-bid font-medium">{live.length} live now</span>
+        <span className="text-sm text-bid font-medium">{live.length} şu anda canlı</span>
       </div>
       {isLoading ? (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

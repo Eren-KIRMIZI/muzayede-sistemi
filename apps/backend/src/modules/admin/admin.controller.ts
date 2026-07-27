@@ -153,6 +153,7 @@ export class AdminController {
   @Get('fraud')
   @ApiOperation({ summary: 'List fraud events for review' })
   @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'status', required: false, enum: ['PENDING', 'REVIEWING', 'CONFIRMED', 'DISMISSED'] })
   async getFraudEvents(
     @Query('page') page?: string,

@@ -3,26 +3,26 @@ import { UserPlus, Gavel, Radio, Trophy } from 'lucide-react'
 const steps = [
   {
     icon: UserPlus,
-    title: 'Create your account',
-    desc: 'Register in seconds and top up your wallet. Verification is handled by the User Service.',
+    title: 'Hesabınızı oluşturun',
+    desc: 'Saniyeler içinde kayıt olun ve cüzdanınızı doldurun. Doğrulama Kullanıcı Hizmeti tarafından yürütülür.',
     accent: 'text-primary',
   },
   {
     icon: Gavel,
-    title: 'Place or automate bids',
-    desc: 'Bid manually or set a ceiling and let auto-bidding keep you in the lead.',
+    title: 'Teklif verin veya otomatikleştirin',
+    desc: 'Manuel teklif verin veya bir tavan belirleyin ve otomatik teklifin sizi önde tutmasına izin verin.',
     accent: 'text-blue',
   },
   {
     icon: Radio,
-    title: 'Watch it live',
-    desc: 'A persistent websocket streams every competing bid to you in under 40ms.',
+    title: 'Canlı izleyin',
+    desc: 'Kalıcı bir websocket her rakip teklifini 40ms altında size aktarır.',
     accent: 'text-bid',
   },
   {
     icon: Trophy,
-    title: 'Win & settle securely',
-    desc: 'Winning triggers the Payment Service with escrow protection until delivery.',
+    title: 'Kazanın ve güvenle yerleşin',
+    desc: 'Kazanma, teslimat_onayına kadar emanet korumasıyla Ödeme Hizmeti\'ni tetikler.',
     accent: 'text-emerald',
   },
 ]
@@ -31,9 +31,9 @@ export function HowItWorks() {
   return (
     <section id="how" className="relative mx-auto max-w-7xl px-6 py-20">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-sm font-medium text-primary">How it works</p>
+        <p className="text-sm font-medium text-primary">Nasıl Çalışır</p>
         <h2 className="mt-2 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-          From sign-up to settlement in four steps
+          Kayıttan yerleşime dört adımda
         </h2>
       </div>
 

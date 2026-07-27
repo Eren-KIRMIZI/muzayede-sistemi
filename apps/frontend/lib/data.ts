@@ -3,62 +3,66 @@ import type { AuctionCategory } from './types'
 export { formatCurrency } from './utils'
 
 export const categories: (Pick<AuctionCategory, 'name' | 'slug'> & { count: number; accent: string })[] = [
-  { name: 'Watches', slug: 'watches', count: 1240, accent: 'brand' },
-  { name: 'Sneakers', slug: 'sneakers', count: 3180, accent: 'bid' },
-  { name: 'Fine Art', slug: 'fine-art', count: 890, accent: 'blue' },
-  { name: 'Automobiles', slug: 'automobiles', count: 420, accent: 'emerald' },
-  { name: 'Cameras', slug: 'cameras', count: 760, accent: 'blue' },
-  { name: 'Instruments', slug: 'instruments', count: 540, accent: 'brand' },
+  { name: 'Elektronik', slug: 'electronics', count: 0, accent: 'brand' },
+  { name: 'Araçlar', slug: 'vehicles', count: 0, accent: 'emerald' },
+  { name: 'Saatler', slug: 'watches', count: 0, accent: 'bid' },
+  { name: 'Sanat', slug: 'art', count: 0, accent: 'blue' },
+  { name: 'Moda', slug: 'fashion', count: 0, accent: 'pink' },
+  { name: 'Ev & Yaşam', slug: 'home', count: 0, accent: 'emerald' },
+  { name: 'Spor', slug: 'sports', count: 0, accent: 'bid' },
+  { name: 'Mücevher', slug: 'jewelry', count: 0, accent: 'blue' },
+  { name: 'Koleksiyon', slug: 'collectibles', count: 0, accent: 'brand' },
+  { name: 'Müzik', slug: 'music', count: 0, accent: 'blue' },
 ]
 
 export const stats = [
-  { label: 'Live auctions running', value: '2,481', delta: '+12.4%' },
-  { label: 'Bids placed today', value: '184K', delta: '+8.1%' },
-  { label: 'Total value settled', value: '$92.7M', delta: '+21.5%' },
-  { label: 'Avg. settlement latency', value: '38ms', delta: '-6.2%' },
+  { label: 'Gerçek zamanlı teklif güncellemeleri', value: 'Canlı', delta: 'WebSocket' },
+  { label: 'Tipik teklif gecikmesi', value: '<40ms', delta: 'Küresel' },
+  { label: 'Emanet koruması', value: '%100', delta: 'Her ödeme' },
+  { label: 'Çalışma süresi SLA', value: '%99.99', delta: 'Kurumsal' },
 ]
 
 export const testimonials = [
   {
     quote:
-      'The real-time bid feed is instant. We migrated our entire collectibles house to AuctionHub and settlement times dropped by 60%.',
-    name: 'Elena Marsh',
-    role: 'Director, Meridian Gallery',
+      'Gerçek zamanlı teklif akışı anlık. Tüm koleksiyon envanterimizi AuctionHub\'a listeledik ve ödeme süreleri dramatik şekilde düştü.',
+    name: 'Sarah Chen',
+    role: 'Galeri Sahibi',
   },
   {
     quote:
-      'Auto-bidding and the websocket layer feel like magic. I have never lost a lot to lag again — it is genuinely enterprise-grade.',
-    name: 'David Okoye',
-    role: 'Collector & Reseller',
+      'Otomatik teklif ve websocket katmanı kusuz hissettiriyor. Gecikme nedeniyle hiçbir lotu kaçırmadım — platform gerçekten güvenilir.',
+    name: 'Marcus Rivera',
+    role: 'Özel Koleksiyoncu',
   },
   {
     quote:
-      'The microservices architecture means we scale to 40k concurrent bidders during drops without breaking a sweat.',
-    name: 'Priya Nandakumar',
-    role: 'CTO, GridSole',
+      'Mikroservis mimarisi trafik artışlarını zahmetsizce işliyor. Son satışımızda sistem ağır yük altında mükemmel şekilde yanıt verdi.',
+    name: 'James Nakamura',
+    role: 'Çevrimiçi Satıcı',
   },
 ]
 
 export const faqs = [
   {
-    q: 'How does real-time bidding work?',
-    a: 'Every bid is pushed through a dedicated Bid Service over a persistent websocket connection. You see competing bids the instant they land — typically within 40 milliseconds globally.',
+    q: 'Gerçek zamanlı teklif verme nasıl çalışır?',
+    a: 'Her teklif, kalıcı bir websocket bağlantısı üzerinden özel bir Teklif Hizmeti aracılığıyla iletilir. Rakip teklifleri anında görürsünüz — tipik olarak 40 milisaniye içinde küresel olarak.',
   },
   {
-    q: 'What is auto-bidding?',
-    a: 'Set a maximum amount and AuctionHub will automatically place the smallest increment needed to keep you in the lead, up to your ceiling. You stay in control without watching the clock.',
+    q: 'Otomatik teklif nedir?',
+    a: 'Maksimum bir tutar belirleyin, AuctionHub sizi lider tutmak için gereken en küçük artışı otomatik olarak yerleştirir. Saati izlemeden kontrol altında kalırsınız.',
   },
   {
-    q: 'How are payments settled?',
-    a: 'Winning bids trigger the Payment Service, which holds funds in escrow until the item is confirmed shipped. We support cards, bank transfer, and wallet balance.',
+    q: 'Ödemeler nasıl hesaplanır?',
+    a: 'Kazanan teklifler Ödeme Hizmeti\'ni tetikler ve öğenin gönderildiği onaylanana kadar fonları emanette tutar. Kart, banka havalesi ve cüzdan bakiyesi desteklenir.',
   },
   {
-    q: 'Is AuctionHub built on microservices?',
-    a: 'Yes. User, Auction, Bid, Payment, Notification, and Inventory services communicate through Kafka and RabbitMQ behind an API Gateway, with Redis caching and PostgreSQL persistence.',
+    q: 'AuctionHub mikroservisler üzerine mi kuruldu?',
+    a: 'Evet. Kullanıcı, Müzayede, Teklif, Ödeme, Bildirim ve Envanter hizmetleri, API Ağ Geçidi arkasında Kafka ve RabbitMQ üzerinden iletişim kurar; Redis önbellekleme ve PostgreSQL kalıcılığı ile.',
   },
   {
-    q: 'Can I run a private auction house on AuctionHub?',
-    a: 'Absolutely. Our Enterprise plan gives you a dedicated tenant, custom branding, and SLA-backed uptime with full admin observability.',
+    q: 'AuctionHub üzerinde özel bir müzayede evi çalıştırabilir miyim?',
+    a: 'Kesinlikle. Kurumsal planımız size özel kiracı, özel marka ve SLA destekli çalışma süresi ile tam yönetici gözlemlenebilirliği sunar.',
   },
 ]
 

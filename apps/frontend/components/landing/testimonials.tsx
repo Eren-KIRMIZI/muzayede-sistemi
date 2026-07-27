@@ -5,9 +5,9 @@ export function Testimonials() {
   return (
     <section className="relative mx-auto max-w-7xl px-6 py-20">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-sm font-medium text-primary">Loved by pros</p>
+        <p className="text-sm font-medium text-primary">Profesyonellerin tercihi</p>
         <h2 className="mt-2 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-          Trusted by collectors and auction houses
+          Koleksiyoncular ve müzayede evleri tarafından güvenilen
         </h2>
       </div>
 
@@ -19,7 +19,7 @@ export function Testimonials() {
           >
             <Quote className="size-6 text-primary/60" />
             <blockquote className="mt-4 flex-1 text-pretty text-sm leading-relaxed text-foreground/90">
-              “{t.quote}”
+              &ldquo;{t.quote}&rdquo;
             </blockquote>
             <figcaption className="mt-6 flex items-center gap-3">
               <span className="flex size-10 items-center justify-center rounded-full neu text-sm font-semibold text-foreground">

@@ -11,17 +11,19 @@ export class SecurityModule implements NestModule {
     // Apply sanitize middleware to all API routes
     consumer
       .apply(SanitizeMiddleware)
-      .forRoutes({ path: 'api/v1/(.*)', method: RequestMethod.ALL })
+      .forRoutes('{*path}')
 
-    // Apply CSRF middleware to state-changing routes only
-    consumer
-      .apply(CsrfMiddleware)
-      .exclude(
-        { path: 'api/v1/(.*)', method: RequestMethod.GET },
-        { path: 'api/v1/(.*)', method: RequestMethod.HEAD },
-        { path: 'api/v1/(.*)', method: RequestMethod.OPTIONS },
-        { path: 'api/docs(.*)', method: RequestMethod.ALL },
-      )
-      .forRoutes({ path: 'api/v1/(.*)', method: RequestMethod.ALL })
+    // CSRF middleware disabled: JWT-based SPA sends tokens via Authorization header,
+    // not cookies, so CSRF attacks are not applicable here.
+    // To re-enable, implement a CSRF token endpoint and have the frontend fetch + send tokens.
+    // consumer
+    //   .apply(CsrfMiddleware)
+    //   .exclude(
+    //     { path: '{*path}', method: RequestMethod.GET },
+    //     { path: '{*path}', method: RequestMethod.HEAD },
+    //     { path: '{*path}', method: RequestMethod.OPTIONS },
+    //     { path: 'api/docs{*path}', method: RequestMethod.ALL },
+    //   )
+    //   .forRoutes('{*path}')
   }
 }

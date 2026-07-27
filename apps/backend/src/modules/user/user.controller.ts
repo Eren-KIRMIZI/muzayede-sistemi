@@ -15,6 +15,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger'
 import { UserService } from './user.service'
 import { UpdateProfileDto } from './dto/update-profile.dto'
 import { CurrentUserId } from '../../common/decorators/user.decorator'
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard'
 import { Roles } from '../../common/decorators/roles.decorator'
 import { RolesGuard } from '../../common/guards/roles.guard'
 
@@ -24,15 +25,33 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('me')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user profile' })
   async getProfile(@CurrentUserId() userId: string) {
     return this.userService.findById(userId)
   }
 
+  @Get('me/stats')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user dashboard stats' })
+  async getMyStats(@CurrentUserId() userId: string) {
+    const stats = await this.userService.getMyStats(userId)
+    return { success: true, data: stats }
+  }
+
+  @Get('me/wallet')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user wallet data' })
+  async getMyWallet(@CurrentUserId() userId: string) {
+    const wallet = await this.userService.getMyWallet(userId)
+    return { success: true, data: wallet }
+  }
+
   @Patch('me')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update current user profile' })
   async updateProfile(
@@ -43,7 +62,7 @@ export class UserController {
   }
 
   @Get()
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN', 'MODERATOR')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'List all users (admin only)' })
@@ -57,7 +76,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN', 'MODERATOR')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get user by ID (admin only)' })
@@ -66,7 +85,7 @@ export class UserController {
   }
 
   @Patch(':id/role')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
@@ -79,7 +98,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)

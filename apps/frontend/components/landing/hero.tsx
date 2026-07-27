@@ -13,15 +13,15 @@ export function Hero() {
         <div className="animate-rise">
           <div className="inline-flex items-center gap-2 rounded-full border border-border glass px-3 py-1.5 text-xs text-muted-foreground">
             <Sparkles className="size-3.5 text-primary" />
-            Microservices Based Online Auction Platform
+            Mikroservis Tabanlı Çevrimiçi Müzayede Platformu
           </div>
           <h1 className="mt-6 text-balance text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
-            Real-Time Online Auctions{' '}
-            <span className="text-gradient">Powered by Microservices</span>
+            Gerçek Zamanlı Çevrimiçi Müzayedeler{' '}
+            <span className="text-gradient">Mikroservislerle Güçlendirilmiş</span>
           </h1>
           <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Bid live against the world with sub-40ms updates. AuctionHub runs on an
-            elastic microservices core built for millions of concurrent bidders.
+            40ms altı güncellemelerle dünyaya karşı canlı teklif verin. AuctionHub,
+            milyonlarca eş zamanlı teklif veren için tasarlanmış esnek bir mikroservis çekirdeği üzerine kuruludur.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -32,7 +32,7 @@ export function Hero() {
                 'h-12 gap-2 px-6 text-sm bg-bid text-background hover:bg-bid/90',
               )}
             >
-              Start Bidding <ArrowRight className="size-4" />
+              Teklif Vermeye Başla <ArrowRight className="size-4" />
             </Link>
             <Link
               href="/auctions"
@@ -41,7 +41,7 @@ export function Hero() {
                 'h-12 px-6 text-sm',
               )}
             >
-              Explore Auctions
+              Müzayedeleri Keşfet
             </Link>
           </div>
 
@@ -49,28 +49,28 @@ export function Hero() {
             <Search className="ml-2 size-4 shrink-0 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search watches, art, sneakers, cars…"
+              placeholder="Saat, sanat, ayakkabı, araç ara..."
               className="h-9 w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <button className={cn(buttonVariants({ size: 'default' }), 'h-9 shrink-0 px-4')}>
-              Search
+              Ara
             </button>
           </div>
 
           <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground">
             <div>
-              <span className="font-mono text-lg font-semibold text-foreground">2,481</span>
-              <p className="text-xs">live auctions</p>
+              <span className="font-mono text-lg font-semibold text-foreground">Gerçek zamanlı</span>
+              <p className="text-xs">teklif güncellemeleri</p>
             </div>
             <div className="h-8 w-px bg-border" />
             <div>
-              <span className="font-mono text-lg font-semibold text-foreground">184K</span>
-              <p className="text-xs">bids today</p>
+              <span className="font-mono text-lg font-semibold text-foreground">40ms altı</span>
+              <p className="text-xs">gecikme</p>
             </div>
             <div className="h-8 w-px bg-border" />
             <div>
-              <span className="font-mono text-lg font-semibold text-foreground">$92.7M</span>
-              <p className="text-xs">settled</p>
+              <span className="font-mono text-lg font-semibold text-foreground">Emanet</span>
+              <p className="text-xs">koruması</p>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@ export function Hero() {
           <div className="relative overflow-hidden rounded-[2rem] glass-strong p-2 glow-brand">
             <Image
               src="/images/hero-auction.png"
-              alt="Futuristic auction visualization"
+              alt="AuctionHub canlı müzayede platformu"
               width={720}
               height={720}
               priority
@@ -94,16 +94,16 @@ export function Hero() {
                 <span className="animate-pulse-ring absolute inline-flex size-full rounded-full bg-bid" />
                 <span className="relative inline-flex size-2 rounded-full bg-bid" />
               </span>
-              Live bid placed
+              Canlı teklif verildi
             </div>
-            <p className="mt-2 text-sm font-medium">Chrono Skeleton</p>
+            <p className="mt-2 text-sm font-medium">Vintage Rolex Submariner</p>
             <p className="font-mono text-xl font-semibold text-foreground">$12,400</p>
           </div>
 
           {/* Floating trending card */}
           <div className="animate-float-slower absolute -right-2 bottom-10 w-56 rounded-2xl glass-strong p-4 sm:-right-6">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-muted-foreground">Trending now</span>
+              <span className="text-xs text-muted-foreground">Şu an popüler</span>
               <span className="inline-flex items-center gap-1 text-xs text-emerald">
                 <TrendingUp className="size-3.5" /> +21%
               </span>

@@ -14,12 +14,12 @@ import { useAuthStore } from '@/lib/stores/auth-store'
 import { formatCurrency } from '@/lib/utils'
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: typeof Clock }> = {
-  DRAFT: { label: 'Draft', color: 'text-muted-foreground', icon: Clock },
-  PENDING: { label: 'Pending', color: 'text-yellow-500', icon: Clock },
-  ACTIVE: { label: 'Active', color: 'text-emerald', icon: CheckCircle },
-  ENDED: { label: 'Ended', color: 'text-muted-foreground', icon: XCircle },
-  SOLD: { label: 'Sold', color: 'text-primary', icon: CheckCircle },
-  CANCELLED: { label: 'Cancelled', color: 'text-destructive', icon: XCircle },
+  DRAFT: { label: 'Taslak', color: 'text-muted-foreground', icon: Clock },
+  PENDING: { label: 'Beklemede', color: 'text-yellow-500', icon: Clock },
+  ACTIVE: { label: 'Aktif', color: 'text-emerald', icon: CheckCircle },
+  ENDED: { label: 'Bitmiş', color: 'text-muted-foreground', icon: XCircle },
+  SOLD: { label: 'Satılmış', color: 'text-primary', icon: CheckCircle },
+  CANCELLED: { label: 'İptal Edilmiş', color: 'text-destructive', icon: XCircle },
 }
 
 export default function MyAuctionsPage() {
@@ -40,7 +40,7 @@ export default function MyAuctionsPage() {
   const auctions = data?.data || []
 
   return (
-    <DashboardShell title="My Auctions" subtitle="Auctions you've listed for sale">
+    <DashboardShell title="Müzayedelerim" subtitle="Satışa çıkardığınız müzayedeler">
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           {['', 'DRAFT', 'ACTIVE', 'ENDED', 'SOLD'].map((s) => (
@@ -53,13 +53,13 @@ export default function MyAuctionsPage() {
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              {s || 'All'}
+              {s || 'Tümü'}
             </button>
           ))}
         </div>
         <Link href="/dashboard/auctions/new">
           <Button size="sm">
-            <Plus className="mr-1 size-3" /> New Auction
+            <Plus className="mr-1 size-3" /> Yeni Müzayede
           </Button>
         </Link>
       </div>
@@ -73,11 +73,11 @@ export default function MyAuctionsPage() {
       ) : auctions.length === 0 ? (
         <EmptyState
           icon={Package}
-          title="No auctions listed"
-          description="Create your first auction and reach thousands of collectors."
+          title="Henüz müzayede listelenmemiş"
+          description="İlk müzayedenizi oluşturun ve binlerce koleksiyoncuya ulaşın."
           action={
             <Link href="/dashboard/auctions/new">
-              <Button size="sm">Create auction</Button>
+              <Button size="sm">Müzayede oluştur</Button>
             </Link>
           }
         />
@@ -106,7 +106,7 @@ export default function MyAuctionsPage() {
                 </div>
                 <div className="text-right">
                   <p className="font-mono text-sm font-semibold">{formatCurrency(a.currentPrice)}</p>
-                  <p className="text-xs text-muted-foreground">{a.bids} bids</p>
+                  <p className="text-xs text-muted-foreground">{a.bids} teklif</p>
                 </div>
                 <span className={`flex items-center gap-1 text-xs ${status.color}`}>
                   <StatusIcon className="size-3" />

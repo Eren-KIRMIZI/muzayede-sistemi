@@ -12,23 +12,23 @@ import { formatCurrency } from '@/lib/utils'
 import type { Bid } from '@/lib/types'
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
-  PLACED: { label: 'Placed', color: 'text-muted-foreground' },
-  OUTBID: { label: 'Outbid', color: 'text-destructive' },
-  WINNING: { label: 'Winning', color: 'text-emerald' },
-  WON: { label: 'Won', color: 'text-primary' },
-  CANCELLED: { label: 'Cancelled', color: 'text-muted-foreground' },
+  PLACED: { label: 'Verilen', color: 'text-muted-foreground' },
+  OUTBID: { label: 'Geçilen', color: 'text-destructive' },
+  WINNING: { label: 'Önde', color: 'text-emerald' },
+  WON: { label: 'Kazanılan', color: 'text-primary' },
+  CANCELLED: { label: 'İptal', color: 'text-muted-foreground' },
 }
 
 function formatTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()
   const seconds = Math.floor(diff / 1000)
-  if (seconds < 60) return 'just now'
+  if (seconds < 60) return 'az önce'
   const minutes = Math.floor(seconds / 60)
-  if (minutes < 60) return `${minutes}m ago`
+  if (minutes < 60) return `${minutes} dk önce`
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
+  if (hours < 24) return `${hours} sa önce`
   const days = Math.floor(hours / 24)
-  return `${days}d ago`
+  return `${days} gün önce`
 }
 
 export default function BidsPage() {
@@ -40,7 +40,7 @@ export default function BidsPage() {
   const bids: Bid[] = data?.data || []
 
   return (
-    <DashboardShell title="My Bids" subtitle="Track all your placed bids">
+    <DashboardShell title="Tekliflerim" subtitle="Verdiğiniz tüm teklifleri takip edin">
       {isLoading ? (
         <div className="mt-4 space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -50,12 +50,12 @@ export default function BidsPage() {
       ) : bids.length === 0 ? (
         <EmptyState
           icon={Gavel}
-          title="No bids placed yet"
-          description="Browse active auctions and place your first bid."
+          title="Henüz teklif verilmedi"
+          description="Aktif müzayedelere göz atın ve ilk teklifinizi verin."
           action={
             <Link href="/auctions">
               <span className="inline-flex items-center gap-1 text-sm text-primary hover:underline">
-                Browse auctions <ArrowRight className="size-3" />
+                Müzayedelere göz at <ArrowRight className="size-3" />
               </span>
             </Link>
           }
@@ -64,7 +64,7 @@ export default function BidsPage() {
         <div className="mt-4 space-y-2">
           {bids.map((bid) => {
             const status = STATUS_CONFIG[bid.status] || STATUS_CONFIG.PLACED
-            const userName = bid.user ? `${bid.user.firstName} ${bid.user.lastName}` : 'You'
+            const userName = bid.user ? `${bid.user.firstName} ${bid.user.lastName}` : 'Siz'
             return (
               <div
                 key={bid.id}
@@ -81,7 +81,7 @@ export default function BidsPage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">
-                    Bid on auction
+                    {bid.auction?.title || `Müzayede #${bid.auctionId.slice(0, 8)}`}
                   </p>
                   <p className="text-xs text-muted-foreground">
                     {formatTimeAgo(bid.createdAt)}
@@ -90,7 +90,7 @@ export default function BidsPage() {
                 <div className="text-right">
                   <p className="font-mono text-sm font-semibold">{formatCurrency(bid.amount)}</p>
                   {bid.maxAmount && (
-                    <p className="text-xs text-muted-foreground">Max: {formatCurrency(bid.maxAmount)}</p>
+                    <p className="text-xs text-muted-foreground">Maks: {formatCurrency(bid.maxAmount)}</p>
                   )}
                 </div>
                 <span className={`text-xs font-medium ${status.color}`}>

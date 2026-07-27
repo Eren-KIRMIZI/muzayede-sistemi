@@ -12,15 +12,15 @@ import { formatCurrency } from '@/lib/utils'
 import { useAuthStore } from '@/lib/stores/auth-store'
 
 const statusConfig: Record<string, { icon: typeof CheckCircle; color: string; bg: string; label: string }> = {
-  COMPLETED: { icon: CheckCircle, color: 'text-emerald', bg: 'bg-emerald/10', label: 'Completed' },
-  PROCESSING: { icon: Clock, color: 'text-primary', bg: 'bg-primary/10', label: 'Processing' },
-  PENDING: { icon: Package, color: 'text-muted-foreground', bg: 'bg-muted/50', label: 'Pending' },
-  FAILED: { icon: XCircle, color: 'text-destructive', bg: 'bg-destructive/10', label: 'Failed' },
-  REFUNDED: { icon: RotateCcw, color: 'text-yellow-500', bg: 'bg-yellow-500/10', label: 'Refunded' },
+  COMPLETED: { icon: CheckCircle, color: 'text-emerald', bg: 'bg-emerald/10', label: 'Tamamlandı' },
+  PROCESSING: { icon: Clock, color: 'text-primary', bg: 'bg-primary/10', label: 'İşleniyor' },
+  PENDING: { icon: Package, color: 'text-muted-foreground', bg: 'bg-muted/50', label: 'Beklemede' },
+  FAILED: { icon: XCircle, color: 'text-destructive', bg: 'bg-destructive/10', label: 'Başarısız' },
+  REFUNDED: { icon: RotateCcw, color: 'text-yellow-500', bg: 'bg-yellow-500/10', label: 'İade edildi' },
 }
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  return new Date(dateStr).toLocaleDateString('tr-TR', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 export default function OrdersPage() {
@@ -34,7 +34,7 @@ export default function OrdersPage() {
   const payments: Payment[] = data?.data || []
 
   return (
-    <DashboardShell title="Orders" subtitle="Track your auction purchases and payments">
+    <DashboardShell title="Siparişler" subtitle="Müzayede alışverişlerinizi ve ödemelerinizi takip edin">
       {isLoading ? (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -44,11 +44,11 @@ export default function OrdersPage() {
       ) : payments.length === 0 ? (
         <EmptyState
           icon={Package}
-          title="No orders yet"
-          description="When you win an auction, your order will appear here."
+          title="Henüz sipariş yok"
+          description="Bir müzayede kazandığınızda siparişiniz burada görünecek."
           action={
             <Link href="/auctions" className="text-sm text-primary hover:underline">
-              Browse auctions
+              Müzayedelere göz atın
             </Link>
           }
         />
@@ -67,17 +67,17 @@ export default function OrdersPage() {
                   <Image src={img} alt="" fill className="object-cover" sizes="64px" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold">{payment.auction?.title || 'Auction'}</p>
+                  <p className="truncate text-sm font-semibold">{payment.auction?.title || 'Müzayede'}</p>
                   <p className="text-xs text-muted-foreground">
-                    {isBuyer ? 'Purchase' : 'Sale'} · {formatDate(payment.createdAt)}
+                    {isBuyer ? 'Satın alma' : 'Satış'} · {formatDate(payment.createdAt)}
                   </p>
                   {payment.escrowStatus === 'HELD' && (
-                    <p className="mt-0.5 text-[10px] text-yellow-500">Funds in escrow</p>
+                    <p className="mt-0.5 text-[10px] text-yellow-500">Emanetteki fonlar</p>
                   )}
                 </div>
                 <div className="text-right">
                   <p className="font-mono text-sm font-semibold">{formatCurrency(payment.amount)}</p>
-                  <p className="text-xs text-muted-foreground">Fee: {formatCurrency(payment.fee)}</p>
+                  <p className="text-xs text-muted-foreground">Ücret: {formatCurrency(payment.fee)}</p>
                 </div>
                 <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${s.bg} ${s.color}`}>
                   <s.icon className="size-3" /> {s.label}

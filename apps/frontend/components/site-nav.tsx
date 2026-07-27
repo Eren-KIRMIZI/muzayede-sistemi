@@ -9,12 +9,12 @@ import { clearTokens } from '@/lib/api-client'
 import { cn } from '@/lib/utils'
 
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/auctions', label: 'Auctions' },
-  { href: '/#categories', label: 'Categories' },
-  { href: '/#how', label: 'How it Works' },
-  { href: '/#pricing', label: 'Pricing' },
-  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/', label: 'Ana Sayfa' },
+  { href: '/auctions', label: 'Müzayedeler' },
+  { href: '/#categories', label: 'Kategoriler' },
+  { href: '/#how', label: 'Nasıl Çalışır' },
+  { href: '/#pricing', label: 'Fiyatlandırma' },
+  { href: '/dashboard', label: 'Kontrol Paneli' },
 ]
 
 export function SiteNav() {
@@ -59,9 +59,9 @@ export function SiteNav() {
                 className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
               >
                 <span className="flex size-7 items-center justify-center rounded-full bg-primary/15 text-xs font-semibold text-primary">
-                  {user?.firstName?.charAt(0)?.toUpperCase() || 'U'}
+                  {user?.firstName?.charAt(0)?.toUpperCase() || 'K'}
                 </span>
-                <span className="max-w-[100px] truncate">{user?.firstName || 'User'}</span>
+                <span className="max-w-[100px] truncate">{user?.firstName || 'Kullanıcı'}</span>
               </button>
               {userMenuOpen && (
                 <div className="absolute right-0 top-full mt-2 w-48 rounded-xl border border-border bg-background p-1.5 shadow-xl">
@@ -70,20 +70,20 @@ export function SiteNav() {
                     onClick={() => setUserMenuOpen(false)}
                     className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-white/5 hover:text-foreground"
                   >
-                    <Gavel className="size-4" /> Dashboard
+                    <Gavel className="size-4" /> Kontrol Paneli
                   </Link>
                   <Link
                     href="/dashboard/profile"
                     onClick={() => setUserMenuOpen(false)}
                     className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-white/5 hover:text-foreground"
                   >
-                    <User className="size-4" /> Profile
+                    <User className="size-4" /> Profil
                   </Link>
                   <button
                     onClick={handleLogout}
                     className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-destructive/10"
                   >
-                    <LogOut className="size-4" /> Sign out
+                    <LogOut className="size-4" /> Çıkış Yap
                   </button>
                 </div>
               )}
@@ -91,13 +91,13 @@ export function SiteNav() {
           ) : (
             <>
               <Link href="/login" className={cn(buttonVariants({ variant: 'ghost', size: 'lg' }), 'h-9')}>
-                Login
+                Giriş Yap
               </Link>
               <Link
                 href="/register"
                 className={cn(buttonVariants({ size: 'lg' }), 'h-9 bg-primary text-primary-foreground hover:bg-primary/90')}
               >
-                Register
+                Kayıt Ol
               </Link>
             </>
           )}
@@ -106,7 +106,7 @@ export function SiteNav() {
         <button
           onClick={() => setOpen((v) => !v)}
           className="flex size-9 items-center justify-center rounded-xl border border-border text-foreground lg:hidden"
-          aria-label="Toggle menu"
+          aria-label="Menüyü aç/kapat"
           aria-expanded={open}
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -134,13 +134,13 @@ export function SiteNav() {
                     onClick={() => setOpen(false)}
                     className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-10')}
                   >
-                    Dashboard
+                    Kontrol Paneli
                   </Link>
                   <button
                     onClick={() => { handleLogout(); setOpen(false) }}
                     className={cn(buttonVariants({ variant: 'destructive', size: 'lg' }), 'h-10')}
                   >
-                    Sign out
+                    Çıkış Yap
                   </button>
                 </>
               ) : (
@@ -150,14 +150,14 @@ export function SiteNav() {
                     onClick={() => setOpen(false)}
                     className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-10')}
                   >
-                    Login
+                    Giriş Yap
                   </Link>
                   <Link
                     href="/register"
                     onClick={() => setOpen(false)}
                     className={cn(buttonVariants({ size: 'lg' }), 'h-10')}
                   >
-                    Register
+                    Kayıt Ol
                   </Link>
                 </>
               )}

@@ -27,12 +27,12 @@ export default function RegisterPage() {
     setError('')
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match')
+      setError('Şifreler eşleşmiyor')
       return
     }
 
     if (password.length < 8) {
-      setError('Password must be at least 8 characters')
+      setError('Şifre en az 8 karakter olmalıdır')
       return
     }
 
@@ -44,18 +44,18 @@ export default function RegisterPage() {
       login(data.user)
       router.push('/dashboard')
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.')
+      setError(err.response?.data?.message || 'Kayıt başarısız. Lütfen tekrar deneyin.')
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <AuthShell eyebrow="Get started">
+    <AuthShell eyebrow="Başlayın">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Create your account</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Hesabınızı Oluşturun</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
-          Join thousands of collectors and sellers on AuctionHub.
+          AuctionHub'a binlerce koleksiyoncu ve satıcıya katılın.
         </p>
       </div>
 
@@ -93,7 +93,7 @@ export default function RegisterPage() {
           label="Email"
           id="email"
           type="email"
-          placeholder="you@company.com"
+            placeholder="you@example.com"
           autoComplete="email"
           icon={Mail}
           value={email}
@@ -129,14 +129,14 @@ export default function RegisterPage() {
           disabled={isLoading}
           className="h-11 w-full rounded-xl bg-primary text-sm font-semibold text-primary-foreground hover:bg-primary/90"
         >
-          {isLoading ? 'Creating account...' : 'Create account'}
+          {isLoading ? 'Hesap oluşturuluyor...' : 'Hesap Oluştur'}
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
-        Already have an account?{' '}
+        Zaten hesabınız var mı?{' '}
         <Link href="/login" className="font-medium text-primary hover:underline">
-          Sign in
+          Giriş Yap
         </Link>
       </p>
     </AuthShell>

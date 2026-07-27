@@ -5,6 +5,9 @@ import { PrismaService } from '../../prisma/prisma.service'
 import { NotificationService } from '../notification/notification.service'
 import { AuctionGateway } from '../notification/notification.gateway'
 import { CacheService } from '../../common/cache/cache.service'
+import { getQueueToken } from '@nestjs/bullmq'
+import { BotDetectionService } from '../fraud/bot-detection.service'
+import { ShillBiddingService } from '../fraud/shill-bidding.service'
 import {
   createMockPrisma,
   createMockNotificationService,
@@ -35,6 +38,9 @@ describe('BidService', () => {
         { provide: NotificationService, useValue: notificationService },
         { provide: AuctionGateway, useValue: gateway },
         { provide: CacheService, useValue: cache },
+        { provide: BotDetectionService, useValue: { isBot: jest.fn().mockResolvedValue(false) } },
+        { provide: ShillBiddingService, useValue: { isShillBidding: jest.fn().mockResolvedValue(false) } },
+        { provide: getQueueToken('notification-queue'), useValue: { add: jest.fn() } },
       ],
     }).compile()
 

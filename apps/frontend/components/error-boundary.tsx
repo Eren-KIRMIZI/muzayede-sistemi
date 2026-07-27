@@ -35,16 +35,16 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-border/60 bg-background/30 p-12 text-center">
           <AlertTriangle className="mb-4 size-10 text-destructive" />
-          <h3 className="text-lg font-semibold">Something went wrong</h3>
+          <h3 className="text-lg font-semibold">Bir hata oluştu</h3>
           <p className="mt-2 max-w-md text-sm text-muted-foreground">
-            {this.state.error?.message || 'An unexpected error occurred.'}
+            {this.state.error?.message || 'Beklenmeyen bir hata oluştu.'}
           </p>
           <Button
             variant="outline"
             className="mt-6"
             onClick={() => this.setState({ hasError: false, error: null })}
           >
-            Try again
+            Tekrar dene
           </Button>
         </div>
       )

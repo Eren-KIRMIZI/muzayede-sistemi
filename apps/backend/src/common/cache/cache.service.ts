@@ -79,7 +79,7 @@ export class CacheService {
 
   private async getOrSetSafe<T>(key: string, factory: () => Promise<T>, ttl?: number): Promise<T> {
     const cached = await this.get<T>(key)
-    if (cached !== undefined) return cached
+    if (cached != null) return cached
 
     if (this.locks.has(key)) {
       return this.locks.get(key)

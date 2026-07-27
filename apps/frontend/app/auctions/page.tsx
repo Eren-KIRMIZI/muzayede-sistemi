@@ -12,12 +12,12 @@ import { auctionsApi } from '@/lib/api/auctions'
 import type { Auction, AuctionCategory, SortOption } from '@/lib/types'
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: 'newly_listed', label: 'Newest' },
-  { value: 'ending_soon', label: 'Ending soon' },
-  { value: 'price_high', label: 'Price: High to Low' },
-  { value: 'price_low', label: 'Price: Low to High' },
-  { value: 'most_bids', label: 'Most bids' },
-  { value: 'most_watched', label: 'Most watched' },
+  { value: 'newly_listed', label: 'En yeni' },
+  { value: 'ending_soon', label: 'Yakında bitiyor' },
+  { value: 'price_high', label: 'Fiyat: Yüksekten düşüğe' },
+  { value: 'price_low', label: 'Fiyat: Düşükten yükseğe' },
+  { value: 'most_bids', label: 'En çok teklif' },
+  { value: 'most_watched', label: 'En çok izlenen' },
 ]
 
 export default function AuctionsPage() {
@@ -60,19 +60,19 @@ export default function AuctionsPage() {
       <section className="relative overflow-hidden pt-28 pb-10">
         <AuroraBackground />
         <div className="relative mx-auto max-w-7xl px-6">
-          <p className="text-sm font-medium text-primary">Marketplace</p>
+          <p className="text-sm font-medium text-primary">Pazar Yeri</p>
           <h1 className="mt-2 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
-            Explore live &amp; upcoming auctions
+            Canlı ve yaklaşan müzayedeleri keşfedin
           </h1>
           <p className="mt-3 max-w-xl text-muted-foreground">
-            {total} active lots across {categories.length} categories, updated in real time.
+            {total} aktif ürün, {categories.length} kategoriler, gerçek zamanlı güncelleniyor.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <div className="flex flex-1 items-center gap-2 rounded-2xl glass-strong px-4 py-3">
               <Search className="size-4 text-muted-foreground" />
               <input
-                placeholder="Search lots, sellers, categories…"
+                placeholder="Ürünleri, satıcıları, kategorileri ara..."
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value)
@@ -111,7 +111,7 @@ export default function AuctionsPage() {
                   : 'border border-border bg-white/[0.03] text-muted-foreground hover:text-foreground'
               }`}
             >
-              All
+              Tümü
             </button>
             {categories.map((c) => (
               <button
@@ -146,9 +146,9 @@ export default function AuctionsPage() {
         ) : auctions.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-background/20 px-6 py-20 text-center">
             <Search className="size-10 text-muted-foreground/50" />
-            <h3 className="mt-4 text-lg font-semibold">No auctions found</h3>
+            <h3 className="mt-4 text-lg font-semibold">Müzayede bulunamadı</h3>
             <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-              Try adjusting your search or filters to find what you&apos;re looking for.
+              Arama veya filtrelerinizi ayarlayarak istediğiniz ürünü bulmayı deneyin.
             </p>
           </div>
         ) : (
@@ -166,17 +166,17 @@ export default function AuctionsPage() {
                   disabled={page === 1}
                   className="rounded-xl border border-border bg-input/40 px-4 py-2 text-sm text-foreground disabled:opacity-40"
                 >
-                  Previous
+                  Önceki
                 </button>
                 <span className="px-4 text-sm text-muted-foreground">
-                  Page {page} of {totalPages}
+                  Sayfa {page} / {totalPages}
                 </span>
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
                   className="rounded-xl border border-border bg-input/40 px-4 py-2 text-sm text-foreground disabled:opacity-40"
                 >
-                  Next
+                  Sonraki
                 </button>
               </div>
             )}
