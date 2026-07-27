@@ -28,7 +28,7 @@ function pad(n: number) {
 
 export function CountdownInline({ endsInMs }: { endsInMs: number }) {
   const { days, hours, minutes, seconds, urgent } = useCountdown(endsInMs)
-  const label = days > 0 ? `${days}d ${pad(hours)}h ${pad(minutes)}m` : `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+  const label = days > 0 ? `${days}g ${pad(hours)}sa ${pad(minutes)}dk` : `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
   return (
     <span
       className={`font-mono tabular-nums ${urgent ? 'text-bid' : 'text-foreground'}`}
@@ -41,10 +41,10 @@ export function CountdownInline({ endsInMs }: { endsInMs: number }) {
 export function CountdownBlocks({ endsInMs }: { endsInMs: number }) {
   const { days, hours, minutes, seconds } = useCountdown(endsInMs)
   const items = [
-    { v: days, l: 'Days' },
-    { v: hours, l: 'Hrs' },
-    { v: minutes, l: 'Min' },
-    { v: seconds, l: 'Sec' },
+    { v: days, l: 'Gün' },
+    { v: hours, l: 'Sa' },
+    { v: minutes, l: 'Dk' },
+    { v: seconds, l: 'Sn' },
   ]
   return (
     <div className="flex gap-2">

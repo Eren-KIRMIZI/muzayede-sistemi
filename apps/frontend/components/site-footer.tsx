@@ -4,15 +4,15 @@ import { Gavel } from 'lucide-react'
 const groups = [
   {
     title: 'Platform',
-    links: ['Live Auctions', 'Categories', 'How it Works', 'Pricing', 'API'],
+    links: ['Canlı Müzayedeler', 'Kategoriler', 'Nasıl Çalışır', 'Fiyatlandırma', 'API'],
   },
   {
-    title: 'Company',
-    links: ['About', 'Careers', 'Press', 'Blog', 'Contact'],
+    title: 'Şirket',
+    links: ['Hakkımızda', 'Kariyer', 'Basın', 'Blog', 'İletişim'],
   },
   {
-    title: 'Resources',
-    links: ['Help Center', 'Bidding Guide', 'Trust & Safety', 'Status', 'Changelog'],
+    title: 'Kaynaklar',
+    links: ['Yardım Merkezi', 'Teklif Rehberi', 'Güven ve Emniyet', 'Durum', 'Değişiklik Kayıtları'],
   },
 ]
 
@@ -29,11 +29,11 @@ export function SiteFooter() {
               <span className="text-base font-semibold tracking-tight">AuctionHub</span>
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              A microservices-based online auction platform for real-time bidding at global scale.
+              Gerçek zamanlı küresel ölçekli teklifler için mikroservis tabanlı çevrimiçi müzayede platformu.
             </p>
             <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-border bg-emerald/10 px-3 py-1.5 text-xs text-emerald">
               <span className="size-1.5 rounded-full bg-emerald" />
-              All systems operational
+              Tüm sistemler çalışıyor
             </div>
           </div>
           {groups.map((g) => (
@@ -55,11 +55,11 @@ export function SiteFooter() {
           ))}
         </div>
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row">
-          <p>© {new Date().getFullYear()} AuctionHub. Built on microservices.</p>
+          <p>© {new Date().getFullYear()} AuctionHub. Mikroservisler üzerine kuruldu.</p>
           <div className="flex gap-6">
-            <Link href="#" className="hover:text-foreground">Privacy</Link>
-            <Link href="#" className="hover:text-foreground">Terms</Link>
-            <Link href="#" className="hover:text-foreground">Security</Link>
+            <Link href="#" className="hover:text-foreground">Gizlilik</Link>
+            <Link href="#" className="hover:text-foreground">Şartlar</Link>
+            <Link href="#" className="hover:text-foreground">Güvenlik</Link>
           </div>
         </div>
       </div>

@@ -50,23 +50,23 @@ export default function CreateAuctionPage() {
       router.push(`/auctions/${res.data.id}`)
     },
     onError: (err: any) => {
-      const msg = err?.response?.data?.message || 'Failed to create auction'
+      const msg = err?.response?.data?.message || 'Müzayede oluşturulamadı'
       setErrors({ submit: Array.isArray(msg) ? msg.join(', ') : msg })
     },
   })
 
   function validate(): boolean {
     const e: Record<string, string> = {}
-    if (!title.trim()) e.title = 'Title is required'
-    if (title.length > 200) e.title = 'Max 200 characters'
-    if (!description.trim()) e.description = 'Description is required'
-    if (!categoryId) e.categoryId = 'Category is required'
-    if (!startingPrice || Number(startingPrice) <= 0) e.startingPrice = 'Must be greater than 0'
-    if (!bidIncrement || Number(bidIncrement) <= 0) e.bidIncrement = 'Must be greater than 0'
-    if (!endsAt) e.endsAt = 'End time is required'
-    if (endsAt && new Date(endsAt) <= new Date()) e.endsAt = 'Must be in the future'
+    if (!title.trim()) e.title = 'Başlık zorunludur'
+    if (title.length > 200) e.title = 'En fazla 200 karakter'
+    if (!description.trim()) e.description = 'Açıklama zorunludur'
+    if (!categoryId) e.categoryId = 'Kategori zorunludur'
+    if (!startingPrice || Number(startingPrice) <= 0) e.startingPrice = '0\'dan büyük olmalıdır'
+    if (!bidIncrement || Number(bidIncrement) <= 0) e.bidIncrement = '0\'dan büyük olmalıdır'
+    if (!endsAt) e.endsAt = 'Bitiş zamanı zorunludur'
+    if (endsAt && new Date(endsAt) <= new Date()) e.endsAt = 'Gelecek bir tarih olmalıdır'
     if (reservePrice && Number(reservePrice) < Number(startingPrice))
-      e.reservePrice = 'Must be >= starting price'
+      e.reservePrice = 'Başlangıç fiyatından büyük veya eşit olmalıdır'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -101,12 +101,12 @@ export default function CreateAuctionPage() {
   const labelClass = 'block text-sm font-medium text-foreground mb-1'
 
   return (
-    <DashboardShell title="Create Auction" subtitle="List a new item for auction">
+    <DashboardShell title="Müzayede Oluştur" subtitle="Müzayedeye yeni bir ürün listeleyin">
       <Link
         href="/dashboard/auctions"
         className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="size-4" /> Back to My Auctions
+        <ArrowLeft className="size-4" /> Müzayedelerime Dön
       </Link>
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-8">
@@ -116,15 +116,15 @@ export default function CreateAuctionPage() {
           </div>
         )}
 
-        {/* Title & Description */}
+        {/* Başlık ve Açıklama */}
         <section className="glass rounded-2xl p-6 space-y-4">
-          <h2 className="font-semibold">Basic Information</h2>
+          <h2 className="font-semibold">Temel Bilgiler</h2>
           <div>
-            <label className={labelClass}>Title *</label>
+            <label className={labelClass}>Başlık *</label>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Vintage Rolex Submariner 1968"
+              placeholder="Örn. Vintage saat, sanat eseri, koleksiyon ayakkabı"
               maxLength={200}
               className={inputClass}
             />
@@ -132,11 +132,11 @@ export default function CreateAuctionPage() {
             <p className="mt-1 text-xs text-muted-foreground">{title.length}/200</p>
           </div>
           <div>
-            <label className={labelClass}>Description *</label>
+            <label className={labelClass}>Açıklama *</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe your item in detail..."
+              placeholder="Ürününüzü detaylı bir şekilde açıklayın..."
               rows={5}
               className={inputClass + ' resize-none'}
             />
@@ -144,17 +144,17 @@ export default function CreateAuctionPage() {
           </div>
         </section>
 
-        {/* Category */}
+        {/* Kategori */}
         <section className="glass rounded-2xl p-6 space-y-4">
-          <h2 className="font-semibold">Category</h2>
+          <h2 className="font-semibold">Kategori</h2>
           <div>
-            <label className={labelClass}>Category *</label>
+            <label className={labelClass}>Kategori *</label>
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
               className={inputClass}
             >
-              <option value="">Select a category</option>
+              <option value="">Kategori seçin</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -165,12 +165,12 @@ export default function CreateAuctionPage() {
           </div>
         </section>
 
-        {/* Pricing */}
+        {/* Fiyatlandırma */}
         <section className="glass rounded-2xl p-6 space-y-4">
-          <h2 className="font-semibold">Pricing</h2>
+          <h2 className="font-semibold">Fiyatlandırma</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className={labelClass}>Starting Price ($) *</label>
+              <label className={labelClass}>Başlangıç Fiyatı ($) *</label>
               <input
                 type="number"
                 value={startingPrice}
@@ -183,12 +183,12 @@ export default function CreateAuctionPage() {
               {fieldError('startingPrice')}
             </div>
             <div>
-              <label className={labelClass}>Reserve Price ($)</label>
+              <label className={labelClass}>Rezerv Fiyatı ($)</label>
               <input
                 type="number"
                 value={reservePrice}
                 onChange={(e) => setReservePrice(e.target.value)}
-                placeholder="Optional minimum sale price"
+                placeholder="İsteğe bağlı minimum satış fiyatı"
                 min="0"
                 step="0.01"
                 className={inputClass}
@@ -197,7 +197,7 @@ export default function CreateAuctionPage() {
             </div>
           </div>
           <div>
-            <label className={labelClass}>Bid Increment ($) *</label>
+            <label className={labelClass}>Teklif Artışı ($) *</label>
             <input
               type="number"
               value={bidIncrement}
@@ -211,11 +211,11 @@ export default function CreateAuctionPage() {
           </div>
         </section>
 
-        {/* Duration */}
+        {/* Süre */}
         <section className="glass rounded-2xl p-6 space-y-4">
-          <h2 className="font-semibold">Duration</h2>
+          <h2 className="font-semibold">Süre</h2>
           <div>
-            <label className={labelClass}>Ends At *</label>
+            <label className={labelClass}>Bitiş Tarihi *</label>
             <input
               type="datetime-local"
               value={endsAt}
@@ -226,35 +226,35 @@ export default function CreateAuctionPage() {
           </div>
         </section>
 
-        {/* Location & Shipping */}
+        {/* Konum ve Kargo */}
         <section className="glass rounded-2xl p-6 space-y-4">
-          <h2 className="font-semibold">Location & Shipping</h2>
+          <h2 className="font-semibold">Konum ve Kargo</h2>
           <div>
-            <label className={labelClass}>Location</label>
+            <label className={labelClass}>Konum</label>
             <input
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="e.g. New York, NY"
+              placeholder="Örn. İstanbul, Türkiye"
               className={inputClass}
             />
           </div>
           <div>
-            <label className={labelClass}>Shipping Info</label>
+            <label className={labelClass}>Kargo Bilgisi</label>
             <input
               value={shipping}
               onChange={(e) => setShipping(e.target.value)}
-              placeholder="e.g. Free shipping within US"
+              placeholder="Örn. Dünya genelinde ücretsiz kargo"
               className={inputClass}
             />
           </div>
         </section>
 
-        {/* Images */}
+        {/* Görseller */}
         <section className="glass rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold">Images</h2>
+            <h2 className="font-semibold">Görseller</h2>
             <Button type="button" variant="ghost" size="sm" onClick={addImageUrl}>
-              <Plus className="mr-1 size-3" /> Add URL
+              <Plus className="mr-1 size-3" /> URL Ekle
             </Button>
           </div>
           {imageUrls.map((url, i) => (
@@ -262,7 +262,7 @@ export default function CreateAuctionPage() {
               <input
                 value={url}
                 onChange={(e) => updateImageUrl(i, e.target.value)}
-                placeholder="https://example.com/image.jpg"
+                placeholder="https://ornek.com/gorsel.jpg"
                 className={inputClass}
               />
               {imageUrls.length > 1 && (
@@ -277,11 +277,11 @@ export default function CreateAuctionPage() {
             </div>
           ))}
           <p className="text-xs text-muted-foreground">
-            Enter image URLs. The first image will be the primary display image.
+            Görsel URL'lerini girin. İlk görsel ana gösterim görseli olarak kullanılacaktır.
           </p>
         </section>
 
-        {/* Submit */}
+        {/* Gönder */}
         <div className="flex items-center gap-3">
           <Button
             type="submit"
@@ -289,11 +289,11 @@ export default function CreateAuctionPage() {
             disabled={createMutation.isPending}
             className="h-12 px-8"
           >
-            {createMutation.isPending ? 'Creating...' : 'Create Auction (Draft)'}
+            {createMutation.isPending ? 'Oluşturuluyor...' : 'Müzayede Oluştur (Taslak)'}
           </Button>
           <Link href="/dashboard/auctions">
             <Button type="button" variant="ghost" size="lg">
-              Cancel
+              İptal
             </Button>
           </Link>
         </div>

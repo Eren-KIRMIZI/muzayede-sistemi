@@ -111,4 +111,111 @@ export class UserService {
       select: { id: true, email: true, role: true },
     })
   }
+
+  async getMyStats(userId: string) {
+    const [
+      totalAuctions,
+      activeAuctions,
+      wonAuctions,
+      activeBids,
+      totalBids,
+      highestBid,
+      totalSpent,
+      totalEarned,
+      watchedCount,
+    ] = await Promise.all([
+      this.prisma.auction.count({ where: { sellerId: userId, deletedAt: null } }),
+      this.prisma.auction.count({ where: { sellerId: userId, status: 'ACTIVE', deletedAt: null } }),
+      this.prisma.auction.count({ where: { winnerId: userId, deletedAt: null, status: 'SOLD' } }),
+      this.prisma.bid.count({ where: { userId, status: 'WINNING' } }),
+      this.prisma.bid.count({ where: { userId } }),
+      this.prisma.bid.findFirst({
+        where: { userId },
+        orderBy: { amount: 'desc' },
+        select: { amount: true },
+      }),
+      this.prisma.payment.aggregate({
+        where: { buyerId: userId, status: 'COMPLETED' },
+        _sum: { amount: true },
+      }),
+      this.prisma.payment.aggregate({
+        where: { sellerId: userId, status: 'COMPLETED' },
+        _sum: { net: true },
+      }),
+      this.prisma.watchlist.count({ where: { userId } }),
+    ])
+
+    const recentBids = await this.prisma.bid.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+      select: { amount: true, createdAt: true, status: true },
+    })
+
+    const bidsPerMonth = Array.from({ length: 7 }, (_, i) => {
+      const date = new Date()
+      date.setMonth(date.getMonth() - (6 - i))
+      const start = new Date(date.getFullYear(), date.getMonth(), 1)
+      const end = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+      return recentBids.filter(
+        (b) => new Date(b.createdAt) >= start && new Date(b.createdAt) <= end,
+      ).length
+    })
+
+    return {
+      totalAuctions,
+      activeAuctions,
+      wonAuctions,
+      activeBids,
+      totalBids,
+      highestBid: highestBid?.amount ? Number(highestBid.amount) : 0,
+      totalSpent: Number(totalSpent._sum.amount ?? 0),
+      totalEarned: Number(totalEarned._sum.net ?? 0),
+      watchedCount,
+      bidsPerMonth,
+    }
+  }
+
+  async getMyWallet(userId: string) {
+    const [payments, totalBalance] = await Promise.all([
+      this.prisma.payment.findMany({
+        where: { buyerId: userId },
+        orderBy: { createdAt: 'desc' },
+        take: 50,
+        select: {
+          id: true,
+          buyerId: true,
+          amount: true,
+          fee: true,
+          net: true,
+          status: true,
+          method: true,
+          escrowStatus: true,
+          createdAt: true,
+          auction: { select: { id: true, title: true } },
+        },
+      }),
+      this.prisma.payment.aggregate({
+        where: { sellerId: userId, status: 'COMPLETED', escrowStatus: 'RELEASED' },
+        _sum: { net: true },
+      }),
+    ])
+
+    const totalSpent = payments
+      .filter((p) => p.status === 'COMPLETED' && p.buyerId === userId)
+      .reduce((sum, p) => sum + Number(p.amount), 0)
+
+    const heldInEscrow = payments
+      .filter((p) => p.escrowStatus === 'HELD')
+      .reduce((sum, p) => sum + Number(p.amount), 0)
+
+    const availableBalance = Number(totalBalance._sum.net ?? 0)
+
+    return {
+      availableBalance,
+      totalSpent,
+      heldInEscrow,
+      transactions: payments,
+    }
+  }
 }

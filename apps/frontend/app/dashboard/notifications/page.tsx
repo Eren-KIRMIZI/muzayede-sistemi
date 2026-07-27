@@ -22,13 +22,13 @@ const typeConfig: Record<string, { icon: typeof Gavel; color: string }> = {
 function formatTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()
   const seconds = Math.floor(diff / 1000)
-  if (seconds < 60) return 'just now'
+  if (seconds < 60) return 'az önce'
   const minutes = Math.floor(seconds / 60)
-  if (minutes < 60) return `${minutes}m ago`
+  if (minutes < 60) return `${minutes} dk önce`
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
+  if (hours < 24) return `${hours} sa önce`
   const days = Math.floor(hours / 24)
-  return `${days}d ago`
+  return `${days} gün önce`
 }
 
 export default function NotificationsPage() {
@@ -64,10 +64,10 @@ export default function NotificationsPage() {
   const unreadCount = notifications.filter((n) => !n.isRead).length
 
   return (
-    <DashboardShell title="Notifications" subtitle="Stay updated on your bids and auctions">
+    <DashboardShell title="Bildirimler" subtitle="Teklifleriniz ve müzayedeleriniz hakkında güncel kalın">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          {unreadCount} unread
+          {unreadCount} okunmamış
         </p>
         {unreadCount > 0 && (
           <Button
@@ -76,7 +76,7 @@ export default function NotificationsPage() {
             onClick={() => markAllReadMutation.mutate()}
             disabled={markAllReadMutation.isPending}
           >
-            <Check className="mr-1 size-3" /> Mark all read
+            <Check className="mr-1 size-3" /> Tümünü okundu işaretle
           </Button>
         )}
       </div>
@@ -90,8 +90,8 @@ export default function NotificationsPage() {
       ) : notifications.length === 0 ? (
         <EmptyState
           icon={Bell}
-          title="No notifications"
-          description="You're all caught up! We'll notify you when there's activity."
+          title="Bildirim yok"
+          description="Her şey yolunda! Aktivite olduğunda sizi bilgilendireceğiz."
         />
       ) : (
         <div className="mt-4 space-y-2">
@@ -119,7 +119,7 @@ export default function NotificationsPage() {
                   <button
                     onClick={() => markReadMutation.mutate(n.id)}
                     className="mt-1 size-2 shrink-0 rounded-full bg-primary transition-colors hover:bg-primary/70"
-                    title="Mark as read"
+                    title="Okundu olarak işaretle"
                   />
                 )}
               </div>

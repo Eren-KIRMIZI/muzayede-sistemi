@@ -9,9 +9,9 @@ export function Faq() {
   return (
     <section className="relative mx-auto max-w-3xl px-6 py-20">
       <div className="text-center">
-        <p className="text-sm font-medium text-primary">FAQ</p>
+        <p className="text-sm font-medium text-primary">SSS</p>
         <h2 className="mt-2 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-          Questions, answered
+          Sorular, yanıtlandı
         </h2>
       </div>
 

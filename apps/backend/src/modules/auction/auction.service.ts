@@ -243,7 +243,7 @@ export class AuctionService {
     return this.cache.getOrSet(
       CacheKey.AUCTION_FEATURED,
       async () => {
-        return this.prisma.auction.findMany({
+        const data = await this.prisma.auction.findMany({
           where: { isFeatured: true, status: 'ACTIVE', deletedAt: null },
           take: 8,
           orderBy: { endsAt: 'asc' },
@@ -254,6 +254,7 @@ export class AuctionService {
             _count: { select: { bids: true, watchers: true } },
           },
         })
+        return data.map((a) => ({ ...a, bids: a._count.bids, watchers: a._count.watchers }))
       },
       CacheTTL.SHORT,
     )
@@ -263,7 +264,7 @@ export class AuctionService {
     return this.cache.getOrSet(
       CacheKey.AUCTION_ENDING_SOON,
       async () => {
-        return this.prisma.auction.findMany({
+        const data = await this.prisma.auction.findMany({
           where: {
             status: 'ACTIVE',
             deletedAt: null,
@@ -278,6 +279,7 @@ export class AuctionService {
             _count: { select: { bids: true, watchers: true } },
           },
         })
+        return data.map((a) => ({ ...a, bids: a._count.bids, watchers: a._count.watchers }))
       },
       CacheTTL.SHORT,
     )
@@ -326,7 +328,11 @@ export class AuctionService {
     ])
 
     return {
-      data: data.map((w) => w.auction),
+      data: data.map((w) => ({
+        ...w.auction,
+        bids: w.auction._count.bids,
+        watchers: w.auction._count.watchers,
+      })),
       total,
       page,
       limit,

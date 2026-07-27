@@ -99,6 +99,7 @@ export interface Bid {
   auctionId: string
   userId: string
   user: Pick<AuctionSeller, 'id' | 'firstName' | 'lastName' | 'avatarUrl'>
+  auction?: { id: string; title: string }
   amount: number
   maxAmount?: number
   isAutoBid: boolean

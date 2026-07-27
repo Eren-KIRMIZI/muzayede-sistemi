@@ -30,18 +30,18 @@ export default function LoginPage() {
       login(data.user)
       router.push('/dashboard')
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Invalid email or password')
+      setError(err.response?.data?.message || 'Geçersiz e-posta veya şifre')
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <AuthShell eyebrow="Welcome back">
+    <AuthShell eyebrow="Tekrar hoş geldiniz">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Sign in to AuctionHub</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">AuctionHub'a Giriş Yap</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
-          Enter your credentials to access your bidding dashboard.
+          Teklif panelinize erişmek için bilgilerinizi girin.
         </p>
       </div>
 
@@ -52,11 +52,35 @@ export default function LoginPage() {
           </div>
         )}
 
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => { setEmail('admin@auctionhub.com'); setPassword('Admin@123456') }}
+            className="flex-1 rounded-xl border border-border bg-white/5 px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+          >
+            Admin
+          </button>
+          <button
+            type="button"
+            onClick={() => { setEmail('seller@auctionhub.com'); setPassword('Seller@123456') }}
+            className="flex-1 rounded-xl border border-border bg-white/5 px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+          >
+            Seller
+          </button>
+          <button
+            type="button"
+            onClick={() => { setEmail('user@auctionhub.com'); setPassword('User@123456') }}
+            className="flex-1 rounded-xl border border-border bg-white/5 px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+          >
+            User
+          </button>
+        </div>
+
         <Field
           label="Email"
           id="email"
           type="email"
-          placeholder="you@company.com"
+          placeholder="you@example.com"
           autoComplete="email"
           icon={Mail}
           value={email}
@@ -81,10 +105,10 @@ export default function LoginPage() {
               type="checkbox"
               className="size-4 rounded border-input bg-background/40 accent-primary"
             />
-            Remember me
+            Beni hatırla
           </label>
           <Link href="/forgot-password" className="text-primary hover:underline">
-            Forgot password?
+            Şifremi unuttum?
           </Link>
         </div>
 
@@ -94,14 +118,14 @@ export default function LoginPage() {
           disabled={isLoading}
           className="h-11 w-full rounded-xl bg-primary text-sm font-semibold text-primary-foreground hover:bg-primary/90"
         >
-          {isLoading ? 'Signing in...' : 'Sign in'}
+          {isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{' '}
+        Hesabınız yok mu?{' '}
         <Link href="/register" className="font-medium text-primary hover:underline">
-          Create one
+          Hesap oluşturun
         </Link>
       </p>
     </AuthShell>

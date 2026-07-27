@@ -19,18 +19,18 @@ function formatBidUser(bid: Bid): string {
   if (bid.user) {
     return `${bid.user.firstName} ${bid.user.lastName}`
   }
-  return 'Anonymous'
+  return 'Anonim'
 }
 
 function formatTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()
   const seconds = Math.floor(diff / 1000)
-  if (seconds < 60) return 'just now'
+  if (seconds < 60) return 'az önce'
   const minutes = Math.floor(seconds / 60)
-  if (minutes < 60) return `${minutes}m ago`
+  if (minutes < 60) return `${minutes}dk önce`
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
-  return `${Math.floor(hours / 24)}d ago`
+  if (hours < 24) return `${hours}sa önce`
+  return `${Math.floor(hours / 24)} gün önce`
 }
 
 export function BidPanel({
@@ -149,7 +149,7 @@ export function BidPanel({
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald opacity-75" />
             <span className="relative inline-flex size-2 rounded-full bg-emerald" />
           </span>
-          Live auction
+          Canlı müzayede
         </div>
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -159,18 +159,18 @@ export function BidPanel({
               <WifiOff className="size-3.5 text-destructive" />
             )}
             <span className={isConnected ? 'text-emerald' : 'text-destructive'}>
-              {isConnected ? 'Connected' : 'Offline'}
+              {isConnected ? 'Bağlı' : 'Çevrimdışı'}
             </span>
           </span>
           <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <Users className="size-4" />
-            {count} bidders
+            {count} teklif veren
           </span>
         </div>
       </div>
 
       <div className="mt-5">
-        <p className="text-xs uppercase tracking-wider text-muted-foreground">Current bid</p>
+        <p className="text-xs uppercase tracking-wider text-muted-foreground">Güncel teklif</p>
         <p
           className={cn(
             'mt-1 font-mono text-4xl font-semibold tabular-nums transition-colors duration-500',
@@ -180,12 +180,12 @@ export function BidPanel({
           {formatCurrency(currentBid)}
         </p>
         <p className="mt-1 text-xs text-muted-foreground">
-          Starting bid {formatCurrency(startBid)} · Next minimum {formatCurrency(currentBid + increment)}
+          Başlangıç teklifi {formatCurrency(startBid)} · Bir sonraki minimum {formatCurrency(currentBid + increment)}
         </p>
       </div>
 
       <div className="mt-5 rounded-2xl border border-border/60 bg-background/40 p-4">
-        <p className="mb-2 text-xs uppercase tracking-wider text-muted-foreground">Auction ends in</p>
+        <p className="mb-2 text-xs uppercase tracking-wider text-muted-foreground">Müzayede bitişine</p>
         <CountdownBlocks endsInMs={getEndsInMs(endsAt)} />
       </div>
 
@@ -211,16 +211,16 @@ export function BidPanel({
         className="mt-3 h-12 w-full rounded-xl bg-primary text-base font-semibold text-primary-foreground hover:bg-primary/90"
       >
         <Gavel className="size-5" />
-        {placeBidMutation.isPending ? 'Placing...' : `Place bid ${formatCurrency(currentBid + increment)}`}
+        {placeBidMutation.isPending ? 'Veriliyor...' : `Teklif ver ${formatCurrency(currentBid + increment)}`}
       </Button>
 
       <div className="mt-6">
         <div className="flex items-center justify-between">
           <p className="flex items-center gap-1.5 text-sm font-medium">
             <TrendingUp className="size-4 text-emerald" />
-            Bid history
+            Teklif geçmişi
           </p>
-          <span className="text-xs text-muted-foreground">{bids.length} bids</span>
+          <span className="text-xs text-muted-foreground">{bids.length} teklif</span>
         </div>
         <ul className="mt-3 max-h-64 space-y-1 overflow-y-auto pr-1">
           {bids.map((b, i) => (
@@ -246,7 +246,7 @@ export function BidPanel({
             </li>
           ))}
           {bids.length === 0 && (
-            <li className="py-4 text-center text-sm text-muted-foreground">No bids yet. Be the first!</li>
+            <li className="py-4 text-center text-sm text-muted-foreground">Henüz teklif yok. İlk siz olun!</li>
           )}
         </ul>
       </div>

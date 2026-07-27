@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard,
   Radio,
@@ -9,38 +9,60 @@ import {
   Package,
   Bell,
   Wallet,
-  CreditCard,
   Heart,
   BarChart3,
-  ShieldCheck,
+  Shield,
+  Users,
+  DollarSign,
+  AlertTriangle,
+  FileText,
   Settings,
-  Network,
+  Home,
+  LogOut,
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { notificationsApi } from '@/lib/api/notifications'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import { clearTokens } from '@/lib/api-client'
 
-const nav = [
-  { section: 'Overview', items: [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/dashboard/live', label: 'Live Auctions', icon: Radio },
-    { href: '/dashboard/bids', label: 'My Bids', icon: Gavel },
-    { href: '/dashboard/auctions', label: 'My Auctions', icon: Package },
+const userNav = [
+  { section: 'Genel Bakış', items: [
+    { href: '/dashboard', label: 'Kontrol Paneli', icon: LayoutDashboard },
+    { href: '/dashboard/live', label: 'Canlı Müzayedeler', icon: Radio },
+    { href: '/dashboard/bids', label: 'Tekliflerim', icon: Gavel },
+    { href: '/dashboard/auctions', label: 'Müzayedelerim', icon: Package },
   ]},
-  { section: 'Account', items: [
-    { href: '/dashboard/notifications', label: 'Notifications', icon: Bell },
-    { href: '/dashboard/wallet', label: 'Wallet', icon: Wallet },
-    { href: '/dashboard/favorites', label: 'Favorites', icon: Heart },
-    { href: '/dashboard/reports', label: 'Reports', icon: BarChart3 },
+  { section: 'Hesap', items: [
+    { href: '/dashboard/notifications', label: 'Bildirimler', icon: Bell },
+    { href: '/dashboard/wallet', label: 'Cüzdan', icon: Wallet },
+    { href: '/dashboard/favorites', label: 'Favoriler', icon: Heart },
+    { href: '/dashboard/reports', label: 'Raporlar', icon: BarChart3 },
   ]},
-  { section: 'System', items: [
-    { href: '/dashboard/settings', label: 'Settings', icon: Settings },
+]
+
+const adminNav = [
+  { section: 'Yönetici', items: [
+    { href: '/dashboard/admin', label: 'Yönetici Paneli', icon: Shield },
+    { href: '/dashboard/admin/users', label: 'Kullanıcılar', icon: Users },
+    { href: '/dashboard/admin/auctions', label: 'Müzayedeler', icon: Gavel },
+    { href: '/dashboard/admin/payments', label: 'Ödemeler', icon: DollarSign },
+    { href: '/dashboard/admin/fraud', label: 'Dolandırıcılık İncelemesi', icon: AlertTriangle },
+    { href: '/dashboard/admin/audit-logs', label: 'Denetim Kayıtları', icon: FileText },
+  ]},
+]
+
+const systemNav = [
+  { section: 'Sistem', items: [
+    { href: '/dashboard/settings', label: 'Ayarlar', icon: Settings },
   ]},
 ]
 
 export function DashboardSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
   const user = useAuthStore((s) => s.user)
+  const logout = useAuthStore((s) => s.logout)
+  const isAdmin = user?.role === 'ADMIN' || user?.role === 'admin'
 
   const { data: unreadData } = useQuery({
     queryKey: ['notifications', 'unread-count'],
@@ -49,9 +71,16 @@ export function DashboardSidebar() {
     refetchInterval: 30_000,
   })
 
+  const navGroups = isAdmin ? [...userNav, ...adminNav, ...systemNav] : [...userNav, ...systemNav]
   const unreadCount = unreadData?.count || 0
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : '??'
-  const fullName = user ? `${user.firstName} ${user.lastName}` : 'Guest'
+  const fullName = user ? `${user.firstName} ${user.lastName}` : 'Misafir'
+
+  const handleLogout = () => {
+    clearTokens()
+    logout()
+    window.location.href = '/'
+  }
 
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex">
@@ -63,15 +92,15 @@ export function DashboardSidebar() {
       </div>
 
       <nav className="no-scrollbar flex-1 overflow-y-auto px-3 py-2">
-        {nav.map((group) => (
+        {navGroups.map((group) => (
           <div key={group.section} className="mb-5">
             <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
               {group.section}
             </p>
             <div className="space-y-0.5">
               {group.items.map((item) => {
-                const active = pathname === item.href
-                const showBadge = item.label === 'Notifications' && unreadCount > 0
+                const active = item.href === '/dashboard' ? pathname === item.href : pathname.startsWith(item.href)
+                const showBadge = item.label === 'Bildirimler' && unreadCount > 0
                 return (
                   <Link
                     key={item.href}
@@ -107,8 +136,24 @@ export function DashboardSidebar() {
           </span>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium">{fullName}</p>
-            <p className="truncate text-xs text-muted-foreground">{user?.role || 'User'}</p>
+            <p className="truncate text-xs text-muted-foreground">{user?.role || 'Kullanıcı'}</p>
           </div>
+        </div>
+        <div className="mt-2 space-y-0.5">
+          <Link
+            href="/"
+            className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
+          >
+            <Home className="size-4" />
+            <span>Ana Sayfa</span>
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/10"
+          >
+            <LogOut className="size-4" />
+            <span>Çıkış Yap</span>
+          </button>
         </div>
       </div>
     </aside>

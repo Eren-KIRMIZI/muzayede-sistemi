@@ -47,12 +47,12 @@ export function AuctionCard({ auction }: { auction: Auction }) {
                 <span className="animate-pulse-ring absolute inline-flex size-full rounded-full bg-bid" />
                 <span className="relative inline-flex size-1.5 rounded-full bg-bid" />
               </span>
-              LIVE
+              CANLI
             </span>
           )}
           {isHot && (
             <span className="inline-flex items-center gap-1 rounded-full bg-background/70 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur">
-              <Flame className="size-3 text-bid" /> Hot
+              <Flame className="size-3 text-bid" /> Popüler
             </span>
           )}
         </div>
@@ -66,28 +66,28 @@ export function AuctionCard({ auction }: { auction: Auction }) {
           <h3 className="text-balance font-semibold leading-tight text-foreground">
             {auction.title}
           </h3>
-          <p className="mt-1 text-xs text-muted-foreground">by {sellerName(auction.seller)}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{sellerName(auction.seller)} tarafından</p>
         </div>
 
         <div className="mt-auto flex items-end justify-between">
           <div>
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Current bid</p>
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Güncel teklif</p>
             <p className="text-lg font-semibold text-foreground">
               {formatCurrency(auction.currentPrice)}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Ends in</p>
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Bitişine</p>
             <CountdownInline endsInMs={endsInMs} />
           </div>
         </div>
 
         <div className="flex items-center gap-4 border-t border-border pt-3 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
-            <Gavel className="size-3.5" /> {auction.bids} bids
+            <Gavel className="size-3.5" /> {auction.bids} teklif
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <Users className="size-3.5" /> {auction.watchers} watching
+            <Users className="size-3.5" /> {auction.watchers} izleniyor
           </span>
         </div>
       </div>

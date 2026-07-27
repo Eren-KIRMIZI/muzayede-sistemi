@@ -19,7 +19,7 @@ export default function FavoritesPage() {
   const watched = data?.data || []
 
   return (
-    <DashboardShell title="Favorites" subtitle="Auctions you're watching">
+    <DashboardShell title="Favoriler" subtitle="İzlediğiniz müzayedeler">
       {isLoading ? (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -29,29 +29,29 @@ export default function FavoritesPage() {
       ) : error ? (
         <EmptyState
           icon={Heart}
-          title="Failed to load favorites"
-          description="Something went wrong while loading your watchlist."
+          title="Favoriler yüklenemedi"
+          description="İzleme listeniz yüklenirken bir hata oluştu."
           action={
             <Button variant="outline" size="sm" onClick={() => refetch()}>
-              Try again
+              Tekrar dene
             </Button>
           }
         />
       ) : watched.length === 0 ? (
         <EmptyState
           icon={Heart}
-          title="No favorites yet"
-          description="Click the heart icon on any auction to add it to your watchlist."
+          title="Henüz favori yok"
+          description="Herhangi bir müzayeded kalp simgesine tıklayarak izleme listenize ekleyebilirsiniz."
           action={
             <Link href="/auctions">
-              <Button variant="outline" size="sm">Browse auctions</Button>
+              <Button variant="outline" size="sm">Müzayedelere göz at</Button>
             </Link>
           }
         />
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {watched.map((a) => (
-            <AuctionCard key={a.id} auction={a} />
+          {watched.map((a, i) => (
+            <AuctionCard key={`${a.id}-${i}`} auction={a} />
           ))}
         </div>
       )}

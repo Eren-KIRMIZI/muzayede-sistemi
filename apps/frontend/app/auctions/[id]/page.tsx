@@ -25,7 +25,6 @@ function sellerName(seller: AuctionDetail['seller']): string {
 }
 
 export default function AuctionDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  // Unwrap params using React 19's use() pattern via a wrapper
   return <AuctionDetailContent paramsPromise={params} />
 }
 
@@ -65,10 +64,10 @@ function AuctionDetailContent({ paramsPromise }: { paramsPromise: Promise<{ id: 
         <AuroraBackground />
         <SiteNav />
         <main className="mx-auto max-w-7xl px-4 pt-28 pb-20 text-center sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-semibold">Auction not found</h1>
-          <p className="mt-2 text-muted-foreground">The auction you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+          <h1 className="text-2xl font-semibold">Müzayede bulunamadı</h1>
+          <p className="mt-2 text-muted-foreground">Aradığınız müzayede mevcut değil veya kaldırılmış.</p>
           <Link href="/auctions" className="mt-6 inline-block text-primary hover:underline">
-            Back to auctions
+            Müzayedelere dön
           </Link>
         </main>
         <SiteFooter />
@@ -89,7 +88,7 @@ function AuctionDetailContent({ paramsPromise }: { paramsPromise: Promise<{ id: 
           className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
-          Back to auctions
+          Müzayedelere dön
         </Link>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
@@ -110,7 +109,7 @@ function AuctionDetailContent({ paramsPromise }: { paramsPromise: Promise<{ id: 
               <div className="absolute left-4 top-4 flex items-center gap-2">
                 <span className="glass-strong inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium">
                   <BadgeCheck className="size-3.5 text-emerald" />
-                  Verified lot
+                  Doğrulanmış ürün
                 </span>
               </div>
             </div>
@@ -133,16 +132,16 @@ function AuctionDetailContent({ paramsPromise }: { paramsPromise: Promise<{ id: 
             </div>
 
             <div className="glass mt-6 rounded-3xl p-6">
-              <h2 className="text-lg font-semibold">Lot details</h2>
+              <h2 className="text-lg font-semibold">Ürün detayları</h2>
               <p className="mt-2 leading-relaxed text-muted-foreground">
                 {auction.description}
               </p>
               <dl className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {[
-                  { label: 'Condition', value: 'Excellent · Authenticated' },
-                  { label: 'Provenance', value: 'Single owner, documented' },
-                  { label: 'Reserve', value: 'Met' },
-                  { label: 'Lot number', value: '#' + auction.id.slice(-4).toUpperCase() },
+                  { label: 'Durum', value: 'Mükemmel · Doğrulanmış' },
+                  { label: 'Köken', value: 'Tek sahipli, belgeli' },
+                  { label: 'Rezerv', value: 'Karşılandı' },
+                  { label: 'Lot numarası', value: '#' + auction.id.slice(-4).toUpperCase() },
                 ].map((s) => (
                   <div key={s.label} className="rounded-2xl border border-border/60 bg-background/30 p-4">
                     <dt className="text-xs uppercase tracking-wider text-muted-foreground">{s.label}</dt>
@@ -152,9 +151,9 @@ function AuctionDetailContent({ paramsPromise }: { paramsPromise: Promise<{ id: 
               </dl>
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 {[
-                  { icon: ShieldCheck, t: 'Buyer protection', d: 'Escrow-backed settlement' },
-                  { icon: Truck, t: 'Insured shipping', d: 'Global, tracked delivery' },
-                  { icon: BadgeCheck, t: 'Authenticity', d: 'Expert verified' },
+                  { icon: ShieldCheck, t: 'Alıcı koruması', d: 'Emanet destekli ödeme' },
+                  { icon: Truck, t: 'Sigortalı kargo', d: 'Küresel, takip edilebilir teslimat' },
+                  { icon: BadgeCheck, t: 'Orijinallik', d: 'Uzman tarafından doğrulanmış' },
                 ].map((f) => (
                   <div key={f.t} className="flex items-start gap-3 rounded-2xl bg-muted/30 p-4">
                     <f.icon className="mt-0.5 size-5 text-primary" />
@@ -179,7 +178,7 @@ function AuctionDetailContent({ paramsPromise }: { paramsPromise: Promise<{ id: 
                   <h1 className="mt-1 text-balance text-2xl font-semibold sm:text-3xl">{auction.title}</h1>
                   <p className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
                     <Eye className="size-4" />
-                    {auction.watchers} watching · Sold by {sellerName(auction.seller)}
+                    {auction.watchers} izliyor · Satan: {sellerName(auction.seller)}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -213,9 +212,9 @@ function AuctionDetailContent({ paramsPromise }: { paramsPromise: Promise<{ id: 
         {/* Related */}
         <section className="mt-16">
           <div className="mb-6 flex items-end justify-between">
-            <h2 className="text-xl font-semibold sm:text-2xl">More in {auction.category?.name}</h2>
+            <h2 className="text-xl font-semibold sm:text-2xl">Daha fazla {auction.category?.name}</h2>
             <Link href="/auctions" className="text-sm text-primary hover:underline">
-              View all
+              Tümünü gör
             </Link>
           </div>
           <RelatedAuctions categoryId={auction.category?.id} currentId={auction.id} />

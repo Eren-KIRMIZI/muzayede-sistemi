@@ -38,7 +38,8 @@ export class AuthController {
     @Req() req: Request,
     @ClientIp() ip: string,
   ) {
-    return this.authService.register(dto, ip, req.headers['user-agent'])
+    const result = await this.authService.register(dto, ip, req.headers['user-agent'])
+    return { success: true, data: result }
   }
 
   @Post('login')
@@ -53,7 +54,8 @@ export class AuthController {
     @Req() req: Request,
     @ClientIp() ip: string,
   ) {
-    return this.authService.login(dto, ip, req.headers['user-agent'])
+    const result = await this.authService.login(dto, ip, req.headers['user-agent'])
+    return { success: true, data: result }
   }
 
   @Post('refresh')
@@ -64,7 +66,8 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Tokens refreshed' })
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   async refresh(@Body() dto: RefreshTokenDto) {
-    return this.authService.refresh(dto.refreshToken)
+    const result = await this.authService.refresh(dto.refreshToken)
+    return { success: true, data: result }
   }
 
   @Post('logout')
@@ -73,7 +76,8 @@ export class AuthController {
   @ApiOperation({ summary: 'Logout and revoke refresh token' })
   @ApiResponse({ status: 200, description: 'Logged out' })
   async logout(@Body() dto: LogoutDto) {
-    return this.authService.logout(dto.refreshToken)
+    const result = await this.authService.logout(dto.refreshToken)
+    return { success: true, data: result }
   }
 
   @Post('forgot-password')
@@ -83,7 +87,8 @@ export class AuthController {
   @ApiOperation({ summary: 'Request password reset' })
   @ApiResponse({ status: 200, description: 'Reset email sent' })
   async forgotPassword(@Body() dto: ForgotPasswordDto) {
-    return this.authService.forgotPassword(dto.email)
+    const result = await this.authService.forgotPassword(dto.email)
+    return { success: true, data: result }
   }
 
   @Post('reset-password')
@@ -94,7 +99,8 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Password reset successful' })
   @ApiResponse({ status: 400, description: 'Invalid token' })
   async resetPassword(@Body() dto: ResetPasswordDto) {
-    return this.authService.resetPassword(dto.token, dto.password, dto.confirmPassword)
+    const result = await this.authService.resetPassword(dto.token, dto.password, dto.confirmPassword)
+    return { success: true, data: result }
   }
 
   @Get('me')
@@ -104,7 +110,8 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'User profile' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async me(@CurrentUserId() userId: string) {
-    return this.authService.me(userId)
+    const result = await this.authService.me(userId)
+    return { success: true, data: result }
   }
 
   // ── Google OAuth ───────────────────────────────────────────────────────────

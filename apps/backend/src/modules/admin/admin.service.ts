@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, Logger, ForbiddenException } from '@nestjs/common'
 import { PrismaService } from '../../prisma/prisma.service'
+import { Prisma } from '@prisma/client'
 
 @Injectable()
 export class AdminService {
@@ -51,7 +52,7 @@ export class AdminService {
   // ── User Management ──────────────────────────────────────────────────────────
 
   async getUsers(page = 1, limit = 20, search?: string, role?: string) {
-    const where: Record<string, unknown> = { isDeleted: false }
+    const where: Prisma.UserWhereInput = { isDeleted: false }
     if (search) {
       where.OR = [
         { email: { contains: search, mode: 'insensitive' } },
@@ -59,7 +60,7 @@ export class AdminService {
         { lastName: { contains: search, mode: 'insensitive' } },
       ]
     }
-    if (role) where.role = role
+    if (role) where.role = role as any
 
     const [data, total] = await Promise.all([
       this.prisma.user.findMany({
@@ -146,8 +147,8 @@ export class AdminService {
   // ── Auction Management ───────────────────────────────────────────────────────
 
   async getAuctions(page = 1, limit = 20, status?: string) {
-    const where: Record<string, unknown> = { deletedAt: null }
-    if (status) where.status = status
+    const where: Prisma.AuctionWhereInput = { deletedAt: null }
+    if (status) where.status = status as any
 
     const [data, total] = await Promise.all([
       this.prisma.auction.findMany({
@@ -200,8 +201,8 @@ export class AdminService {
   // ── Payment Management ───────────────────────────────────────────────────────
 
   async getPayments(page = 1, limit = 20, status?: string) {
-    const where: Record<string, unknown> = {}
-    if (status) where.status = status
+    const where: Prisma.PaymentWhereInput = {}
+    if (status) where.status = status as any
 
     const [data, total] = await Promise.all([
       this.prisma.payment.findMany({
@@ -224,8 +225,8 @@ export class AdminService {
   // ── Fraud Review ────────────────────────────────────────────────────────────
 
   async getFraudEvents(page = 1, limit = 20, status?: string) {
-    const where: Record<string, unknown> = {}
-    if (status) where.status = status
+    const where: Prisma.FraudEventWhereInput = {}
+    if (status) where.status = status as any
 
     const [data, total] = await Promise.all([
       this.prisma.fraudEvent.findMany({
@@ -267,8 +268,8 @@ export class AdminService {
   // ── Audit Logs ───────────────────────────────────────────────────────────────
 
   async getAuditLogs(page = 1, limit = 50, action?: string, userId?: string) {
-    const where: Record<string, unknown> = {}
-    if (action) where.action = action
+    const where: Prisma.AuditLogWhereInput = {}
+    if (action) where.action = action as any
     if (userId) where.userId = userId
 
     const [data, total] = await Promise.all([

@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'AuctionHub — Real-Time Online Auctions Powered by Microservices',
+  title: 'AuctionHub — Gerçek Zamanlı Çevrimiçi Müzayedeler',
   description:
-    'AuctionHub is a microservices-based online auction platform for real-time bidding, live auctions, and enterprise-grade auction analytics.',
+    'AuctionHub, gerçek zamanlı teklif verme, canlı müzayedeler ve kurumsal düzeyde müzayede analitiği sunan mikro servis tabanlı çevrimiçi müzayede platformudur.',
   generator: 'v0.app',
 }
 
@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`dark ${inter.variable} ${geistMono.variable}`}>
+    <html lang="tr" className={`dark ${inter.variable} ${geistMono.variable}`}>
       <body className="bg-background font-sans antialiased">
         <Providers>{children}</Providers>
         {process.env.NODE_ENV === 'production' && <Analytics />}
