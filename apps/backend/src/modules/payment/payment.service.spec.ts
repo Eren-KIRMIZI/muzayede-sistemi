@@ -98,7 +98,7 @@ describe('PaymentService', () => {
         releasedAt: new Date(),
       })
 
-      const result = await service.releaseEscrow('payment-1', 'admin-1')
+      const result = await service.releaseEscrow('payment-1', 'user-2')
       expect(prisma.payment.update).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { id: 'payment-1' },
@@ -110,7 +110,11 @@ describe('PaymentService', () => {
 
     it('should throw NotFoundException if payment not found', async () => {
       ;(prisma.payment.findUnique as jest.Mock).mockResolvedValue(null)
-      await expect(service.releaseEscrow('bad-id', 'admin-1')).rejects.toThrow(NotFoundException)
+      await expect(service.releaseEscrow('bad-id', 'user-2')).rejects.toThrow(NotFoundException)
+    })
+
+    it('should throw ForbiddenException if not the buyer', async () => {
+      await expect(service.releaseEscrow('payment-1', 'admin-1')).rejects.toThrow(ForbiddenException)
     })
 
     it('should throw BadRequestException if escrow is not HELD', async () => {
@@ -118,7 +122,7 @@ describe('PaymentService', () => {
         ...mockPayment,
         escrowStatus: 'RELEASED',
       })
-      await expect(service.releaseEscrow('payment-1', 'admin-1')).rejects.toThrow(BadRequestException)
+      await expect(service.releaseEscrow('payment-1', 'user-2')).rejects.toThrow(BadRequestException)
     })
   })
 
