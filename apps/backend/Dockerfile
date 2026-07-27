@@ -3,8 +3,8 @@ RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
 FROM base AS deps
-COPY package.json .npmrc pnpm-lock.yaml* ./
-RUN corepack enable pnpm && pnpm install --no-frozen-lockfile --prod=false
+COPY package.json pnpm-lock.yaml* ./
+RUN corepack enable && corepack prepare pnpm@9.15.0 --activate && pnpm install --no-frozen-lockfile --prod=false
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules

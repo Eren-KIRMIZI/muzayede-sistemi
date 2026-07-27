@@ -77,5 +77,15 @@
     "ts-jest": "^29.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "@scarf/scarf",
+      "msgpackr-extract",
+      "prisma"
+    ]
   }
 }
