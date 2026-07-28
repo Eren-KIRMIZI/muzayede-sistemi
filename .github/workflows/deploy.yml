@@ -69,37 +69,12 @@ jobs:
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
             NEXT_PUBLIC_WS_URL=${{ secrets.NEXT_PUBLIC_WS_URL }}
 
-  deploy-staging:
-    name: Deploy to Staging
-    runs-on: ubuntu-latest
-    needs: build-and-push
-    environment: staging
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy to staging server
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.STAGING_USER }}
-          key: ${{ secrets.STAGING_SSH_KEY }}
-          script: |
-            cd ${{ secrets.STAGING_APP_DIR }}
-            docker compose -f docker-compose.staging.yml pull
-            docker compose -f docker-compose.staging.yml up -d --remove-orphans
-            docker system prune -f
-
   notify:
     name: Notify
     runs-on: ubuntu-latest
-    needs: [build-and-push, deploy-staging]
+    needs: build-and-push
     if: always()
     steps:
       - name: Deployment status
         run: |
-          if [ "${{ needs.deploy-staging.result }}" = "success" ]; then
-            echo "✅ Deployed to staging: ${{ needs.build-and-push.outputs.backend-tag }}"
-          else
-            echo "❌ Deployment failed"
-            exit 1
-          fi
+          echo "✅ Images pushed: ${{ needs.build-and-push.outputs.backend-tag }}"
