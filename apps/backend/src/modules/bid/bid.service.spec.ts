@@ -40,7 +40,7 @@ describe('BidService', () => {
         { provide: CacheService, useValue: cache },
         { provide: BotDetectionService, useValue: { isBot: jest.fn().mockResolvedValue(false), calculateBotScore: jest.fn().mockResolvedValue({ botScore: 0.1 }) } },
         { provide: ShillBiddingService, useValue: { isShillBidding: jest.fn().mockResolvedValue(false), checkIPCorrelation: jest.fn().mockResolvedValue({ isMatch: false }), detectRapidEscalation: jest.fn().mockResolvedValue({ suspicious: false }) } },
-        { provide: getQueueToken('notification-queue'), useValue: { add: jest.fn() } },
+        { provide: getQueueToken('notification-queue'), useValue: { add: jest.fn().mockResolvedValue({}) } },
       ],
     }).compile()
 
