@@ -9,6 +9,7 @@ RUN corepack enable && corepack prepare pnpm@9.15.0 --activate && pnpm install -
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN echo '{"compilerOptions":{"strict":true,"skipLibCheck":true,"esModuleInterop":true,"moduleResolution":"bundler","resolveJsonModule":true,"isolatedModules":true,"forceConsistentCasingInFileNames":true}}' > /tsconfig.base.json
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npx next build
 
