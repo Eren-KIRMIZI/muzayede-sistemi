@@ -37,7 +37,7 @@ const auctionImages: Record<string, { url: string; alt: string }[]> = {
     { url: unsplash('photo-1516924962500-2b4b3b99ea02'), alt: 'Guitar Headstock' },
   ],
   'diamond': [
-    { url: unsplash('photo-1515562141589-67f0d93e27a0'), alt: 'Diamond Tennis Bracelet' },
+    { url: unsplash('photo-1599643478524-fb66f70a00ea'), alt: 'Diamond Tennis Bracelet' },
     { url: unsplash('photo-1603561591411-07134e71a2a9'), alt: 'Diamond Close Up' },
   ],
   'ps5-pro': [
