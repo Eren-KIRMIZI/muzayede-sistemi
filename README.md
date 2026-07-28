@@ -4,6 +4,10 @@ Bu proje, yüksek eşzamanlılık (high concurrency) gereksinimlerini karşılay
 
 Proje, **NestJS** ve **TypeScript** ile geliştirilmiş olup modüler monolit mimarisini benimsemektedir. Her domain (müzayede, teklif, ödeme vb.) kendi içinde izole edilerek ileride mikroservis mimarisine geçişe hazır biçimde yapılandırılmıştır.
 
+# *** Video: **** #
+
+https://youtu.be/mJ_MEZwG7sE
+
 ---
 
 ## İçindekiler
