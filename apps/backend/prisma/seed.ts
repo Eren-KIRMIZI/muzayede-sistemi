@@ -37,12 +37,12 @@ const auctionImages: Record<string, { url: string; alt: string }[]> = {
     { url: unsplash('photo-1516924962500-2b4b3b99ea02'), alt: 'Guitar Headstock' },
   ],
   'diamond': [
-    { url: unsplash('photo-1599643478524-fb66f70a00ea'), alt: 'Diamond Tennis Bracelet' },
+    { url: unsplash('photo-1573408301185-9146fe634ad0'), alt: 'Diamond Tennis Bracelet' },
     { url: unsplash('photo-1603561591411-07134e71a2a9'), alt: 'Diamond Close Up' },
   ],
   'ps5-pro': [
     { url: unsplash('photo-1606144042614-b2417e99c4e3'), alt: 'PlayStation 5 Pro Bundle' },
-    { url: unsplash('photo-1621259192911-93f85a1a2e53'), alt: 'PS5 Controllers' },
+    { url: unsplash('photo-1496181133206-80ce9b88a853'), alt: 'PS5 Controllers' },
   ],
   'jordan': [
     { url: unsplash('photo-1574629810360-7efbbe195018'), alt: 'Signed Michael Jordan Jersey' },
@@ -50,11 +50,11 @@ const auctionImages: Record<string, { url: string; alt: string }[]> = {
   ],
   'rug': [
     { url: unsplash('photo-1600166898405-da9535204843'), alt: 'Antique Persian Tabriz Rug' },
-    { url: unsplash('photo-1558618666-fcd25c85f82e'), alt: 'Rug Pattern Detail' },
+    { url: unsplash('photo-1574169208507-84376144848b'), alt: 'Rug Pattern Detail' },
   ],
   'charizard': [
     { url: unsplash('photo-1612178991541-b48cc8e92a4d'), alt: 'PSA 10 Charizard Holographic' },
-    { url: unsplash('photo-1625961332771-3f036cbf4f85'), alt: 'Pokemon Cards Collection' },
+    { url: unsplash('photo-1535223289827-42f1e9919769'), alt: 'Pokemon Cards Collection' },
   ],
   'sonos': [
     { url: unsplash('photo-1558089687-f282ffcbc126'), alt: 'Sonos Arc Soundbar' },
@@ -69,7 +69,7 @@ const auctionImages: Record<string, { url: string; alt: string }[]> = {
     { url: unsplash('photo-1555041469-a586c61ea9bc'), alt: 'Dining Room Interior' },
   ],
   'kitchen-aid': [
-    { url: unsplash('photo-1594385208974-2f145757a444'), alt: 'KitchenAid Stand Mixer' },
+    { url: unsplash('photo-1588702547923-7093a6c3ba33'), alt: 'KitchenAid Stand Mixer' },
     { url: unsplash('photo-1556909114-f6e7ad7d3136'), alt: 'Kitchen Counter' },
   ],
   'leica': [
