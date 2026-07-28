@@ -114,6 +114,7 @@ describe('PaymentService', () => {
     })
 
     it('should throw ForbiddenException if not the buyer', async () => {
+      ;(prisma.payment.findUnique as jest.Mock).mockResolvedValue(mockPayment)
       await expect(service.releaseEscrow('payment-1', 'admin-1')).rejects.toThrow(ForbiddenException)
     })
 
