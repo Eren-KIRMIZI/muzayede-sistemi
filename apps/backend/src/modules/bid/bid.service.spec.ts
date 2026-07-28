@@ -24,12 +24,14 @@ describe('BidService', () => {
   let notificationService: ReturnType<typeof createMockNotificationService>
   let gateway: ReturnType<typeof createMockGateway>
   let cache: ReturnType<typeof createMockCacheService>
+  let queueMock: { add: jest.Mock }
 
   beforeEach(async () => {
     prisma = createMockPrisma()
     notificationService = createMockNotificationService()
     gateway = createMockGateway()
     cache = createMockCacheService()
+    queueMock = { add: jest.fn().mockResolvedValue({}) }
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -40,7 +42,7 @@ describe('BidService', () => {
         { provide: CacheService, useValue: cache },
         { provide: BotDetectionService, useValue: { isBot: jest.fn().mockResolvedValue(false), calculateBotScore: jest.fn().mockResolvedValue({ botScore: 0.1 }) } },
         { provide: ShillBiddingService, useValue: { isShillBidding: jest.fn().mockResolvedValue(false), checkIPCorrelation: jest.fn().mockResolvedValue({ isMatch: false }), detectRapidEscalation: jest.fn().mockResolvedValue({ suspicious: false }) } },
-        { provide: getQueueToken('notification-queue'), useValue: { add: jest.fn().mockResolvedValue({}) } },
+        { provide: getQueueToken('notification-queue'), useValue: queueMock },
       ],
     }).compile()
 
@@ -142,14 +144,15 @@ describe('BidService', () => {
 
       await service.placeBid('auction-1', 'user-2', { amount: 160 })
 
-      expect(notificationService.create).toHaveBeenCalledWith(
-        'user-3',
-        'OUTBID',
-        expect.any(String),
-        expect.any(String),
+      expect(queueMock.add).toHaveBeenCalledWith(
+        'outbid',
+        expect.objectContaining({
+          userId: 'user-3',
+          type: 'OUTBID',
+          auctionId: 'auction-1',
+        }),
         expect.any(Object),
       )
-      expect(gateway.sendNotification).toHaveBeenCalled()
     })
   })
 
