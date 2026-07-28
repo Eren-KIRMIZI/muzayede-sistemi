@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * OpenTelemetry distributed tracing bootstrap.
  * Must be imported BEFORE any other module (top of main.ts).
